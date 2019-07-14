@@ -20,10 +20,6 @@ public class MemoryGame extends Application
   @Override
   public void start(Stage primaryStage) throws Exception {
 
-    // s = new GameScene
-    // s.onSOmethingHappenes()
-    // primary.setScene()
-
     this.primaryStage = primaryStage;
     primaryStage.setTitle("Memory Training Game!");
 
