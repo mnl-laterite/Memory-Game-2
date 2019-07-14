@@ -27,17 +27,16 @@ public class MemoryGame extends Application
     gamePlayGUI = new GamePlayGUI(this);
     endGameGUI = new EndGameGUI(this);
     gameLogic = new GameLogic(mainMenuGUI, Difficulty.DEFAULT);
+
     mainMenuGUI.setLogic(gameLogic);
 
     mainScene = new Scene(mainMenuGUI.getMenuSettingsPanel(),480,800);
-
     mainScene.getStylesheets().add(this.getClass().getResource("/mainMenuStyle.css").toExternalForm());
 
     gameScene = new Scene(gamePlayGUI.getGameLayout(), 480, 800);
     endScene = new Scene(endGameGUI.getEndGameLayout(), 480, 800);
 
     primaryStage.setScene(mainScene);
-
     primaryStage.show();
   }
 

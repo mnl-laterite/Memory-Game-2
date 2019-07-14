@@ -21,8 +21,6 @@ public class MainMenuGUI {
   private Button defaultButton;
   private Button hardButton;
 
-
-
   private GameLogic gameLogic;
 
   public MainMenuGUI(MemoryGame memoryGame) {
