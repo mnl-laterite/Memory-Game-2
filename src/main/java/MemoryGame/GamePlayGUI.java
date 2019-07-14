@@ -1,19 +1,25 @@
 package MemoryGame;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 public class GamePlayGUI {
 
   private MemoryGame memoryGame;
 
   private Canvas gameCanvas;
+  private Pane canvasContainer;
   private Image[] gamePieces;
+  private GraphicsContext gc;
 
   private BorderPane gameLayout;
   private HBox gameOptions;
@@ -26,10 +32,14 @@ public class GamePlayGUI {
 
     this.memoryGame = memoryGame;
     gameLayout = new BorderPane();
-    gameCanvas = new Canvas();
+    canvasContainer = new Pane();
+
+    gameCanvas = new ResizableCanvas(canvasContainer.widthProperty(),canvasContainer.heightProperty());
+    canvasContainer.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+    canvasContainer.getChildren().add(gameCanvas);
     gameOptions = new HBox();
 
-    gameLayout.setCenter(gameCanvas);
+    gameLayout.setCenter(canvasContainer);
     gameLayout.setBottom(gameOptions);
 
     getHintButton = new Button("Get Hint!");
@@ -43,6 +53,7 @@ public class GamePlayGUI {
 
     gameOptions.getChildren().addAll(resetButton, getHintButton, quitButton);
     gameOptions.setSpacing(10);
+    gameOptions.setPadding(new Insets(10,10,10,10));
     gameOptions.setAlignment(Pos.BOTTOM_RIGHT);
 
   }
