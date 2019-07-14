@@ -4,15 +4,13 @@ import java.util.Random;
 
 public class GameLogic {
 
-  private MainMenuGUI mainMenuGUI;
   private int[] gamePieces;
   private Difficulty gameDifficulty;
   private short pairsFound;
   private short pairsTotal;
 
-  public GameLogic (MainMenuGUI mainMenuGUI, Difficulty difficulty) {
+  public GameLogic (Difficulty difficulty) {
 
-    this.mainMenuGUI = mainMenuGUI;
     setDifficulty(difficulty);
     pairsFound = 0;
     gamePieces = new int[24];

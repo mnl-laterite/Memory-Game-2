@@ -1,0 +1,20 @@
+Button {
+  -fx-background-color:  rgba(255,255,255,0.5);
+  -fx-font-family: "Helvetica Neue";
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+}
+
+Button:hover {
+  -fx-background-color:  rgba(255,255,255,0.8);
+  -fx-font-family: "Helvetica Neue";
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+}
+
+Button:pressed {
+  -fx-background-color:  rgba(255,255,255,1);
+  -fx-font-family: "Helvetica Neue";
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+}
