@@ -35,6 +35,7 @@ public class MemoryGame extends Application
     mainScene.getStylesheets().add(this.getClass().getResource("/mainMenuStyle.css").toExternalForm());
 
     gameScene = new Scene(gamePlayGUI.getGameLayout(), 800, 800);
+    gameScene.getStylesheets().add(this.getClass().getResource("/gamePlayStyle.css").toExternalForm());
 
     endScene = new Scene(endGameGUI.getEndGameLayout(), 480, 800);
 
