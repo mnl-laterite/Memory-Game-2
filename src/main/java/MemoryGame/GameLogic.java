@@ -4,7 +4,8 @@ import java.util.Random;
 
 public class GameLogic {
 
-  private int[] gamePieces;
+  private int[][] gamePlayMap;
+  private int gamePlayMapDepth;
   private Difficulty gameDifficulty;
   private short pairsFound;
   private short pairsTotal;
@@ -13,15 +14,21 @@ public class GameLogic {
 
     setDifficulty(difficulty);
     pairsFound = 0;
-    gamePieces = new int[24];
+    gamePlayMap = new int[5][5];
+    shuffleGamePieces();
 
-    initialize();
+
+
+  }
+
+  public void resetGame (Difficulty difficulty) {
+
+    pairsFound = 0;
+    setDifficulty(difficulty);
+    shuffleGamePieces();
 
   }
 
-  private void initialize() {
-
-  }
 
   public void setDifficulty (Difficulty difficulty) {
 
@@ -30,21 +37,25 @@ public class GameLogic {
       case EASY:
         gameDifficulty = Difficulty.EASY;
         pairsTotal = 4;
+        gamePlayMapDepth = 3;
         break;
 
       case HARD:
         gameDifficulty = Difficulty.HARD;
         pairsTotal = 12;
+        gamePlayMapDepth = 5;
         break;
 
       case DEFAULT:
         gameDifficulty = Difficulty.DEFAULT;
         pairsTotal = 8;
+        gamePlayMapDepth = 4;
         break;
 
       default:
         gameDifficulty = Difficulty.DEFAULT;
         pairsTotal = 8;
+        gamePlayMapDepth = 4;
         break;
     }
 
@@ -55,13 +66,13 @@ public class GameLogic {
     int i, j, temp;
 
     Random rand = new Random();
-    int[] shuffler = new int[pairsTotal*2];
+    int[] shuffler = new int[pairsTotal * 2];
 
-    for (i = 0; i < pairsTotal*2; ++i) {
-      shuffler[i] = i < pairsTotal ? i+1 : i+1 - pairsTotal;
+    for (i = 0; i < pairsTotal * 2; ++i) {
+      shuffler[i] = i < pairsTotal ? -i - 1 : - i - 1 + pairsTotal;
     }
 
-    for (i = pairsTotal*2 - 1; i > 0; --i) {
+    for (i = pairsTotal * 2 - 1; i > 0; --i) {
 
       j = rand.nextInt(i);
 
@@ -70,8 +81,12 @@ public class GameLogic {
       shuffler[i] = temp;
     }
 
-    for (i = 0; i < pairsTotal*2; ++i) {
-      gamePieces[i] = shuffler[i];
+    temp = 0;
+    for (i = 0; i < gamePlayMapDepth; ++i) {
+      for (j = 0; j < gamePlayMapDepth; ++j) {
+        gamePlayMap[i][j] = temp < 2*pairsTotal ? shuffler[temp] : 0;
+        ++temp;
+      }
     }
   }
 
