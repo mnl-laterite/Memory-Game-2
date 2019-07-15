@@ -68,17 +68,17 @@ public class MainMenuGUI {
   }
 
   private void easyButtonPressed () {
-    gameLogic.setDifficulty(Difficulty.EASY);
+    gameLogic.resetGame(Difficulty.EASY);
     difficultyButtonPressed();
   }
 
   private void defaultButtonPressed () {
-    gameLogic.setDifficulty(Difficulty.DEFAULT);
+    gameLogic.resetGame(Difficulty.DEFAULT);
     difficultyButtonPressed();
   }
 
   private void hardButtonPressed () {
-    gameLogic.setDifficulty(Difficulty.HARD);
+    gameLogic.resetGame(Difficulty.HARD);
     difficultyButtonPressed();
   }
 

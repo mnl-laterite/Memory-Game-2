@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
@@ -51,12 +52,16 @@ public class GamePlayGUI {
     gameLayout.setBottom(gameOptions);
 
     gamePieces[0] = new Image(this.getClass().getResource("/testSprite2.png").toExternalForm());
-    gamePieces[1] = new Image(this.getClass().getResource("/testSprite.webp").toExternalForm());
+
+    for (int i=1; i<=12; ++i) {
+      gamePieces[i] = new Image(this.getClass().getResource("/" + i + ".webp").toExternalForm());
+    }
 
     gc = gameCanvas.getGraphicsContext2D();
 
     animationLoop = new Timeline();
     animationLoop.setCycleCount(Timeline.INDEFINITE);
+    //gameCanvas.setOnMouseClicked(gameLogic.getMouseClickDetector());
 
     gameStartTime = System.currentTimeMillis();
 
@@ -67,10 +72,18 @@ public class GamePlayGUI {
         public void handle(ActionEvent event) {
 
           //needs game logic completion
-
+          int limit = gameLogic.getGamePlayMapDepth();
           gc.clearRect(0,0,gameCanvas.getWidth(),gameCanvas.getHeight());
-          gc.drawImage(gamePieces[0], 196,100, 100,100);
-          gc.drawImage(gamePieces[1], 196,200,100,100);
+
+          for (int i = 0; i<limit; ++i) {
+            for (int j = 0; j<limit; ++j) {
+              if (gameLogic.getMapContents(i,j) > 0)
+              gc.drawImage(gamePieces[gameLogic.getMapContents(i,j)],i*100+10,j*100+10,100,100);
+              else
+                gc.drawImage(gamePieces[0], i*100+10,j*100+10,100,100);
+            }
+          }
+
         }
       }
     );
@@ -108,7 +121,13 @@ public class GamePlayGUI {
 
   }
 
+  public Dimension2D getClickCoordinates (MouseEvent event) {
+    Dimension2D dim = new Dimension2D(event.getX(), event.getY());
+    return dim;
+  }
+
   private void resetButtonPressed() {
+    gameLogic.resetGame(Difficulty.DEFAULT);
     memoryGame.setScene(memoryGame.getMainScene());
   }
 
