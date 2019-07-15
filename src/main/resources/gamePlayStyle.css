@@ -28,3 +28,10 @@ HBox {
   -fx-background-size: cover;
   -fx-background-position: center center;
 }
+
+#container {
+  -fx-background-image: url("photo-1438755582627-221038b62986.webp");
+  -fx-background-repeat: stretch;
+  -fx-background-size: cover;
+  -fx-background-position: center center;
+}

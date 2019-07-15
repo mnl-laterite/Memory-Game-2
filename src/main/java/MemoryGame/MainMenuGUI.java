@@ -21,9 +21,10 @@ public class MainMenuGUI {
 
   private GameLogic gameLogic;
 
-  public MainMenuGUI(MemoryGame memoryGame) {
+  public MainMenuGUI(MemoryGame memoryGame, GameLogic gameLogic) {
 
     this.memoryGame = memoryGame;
+    this.gameLogic = gameLogic;
 
     menuLayout = new VBox();
     menuLayout.setSpacing(10);
@@ -63,6 +64,7 @@ public class MainMenuGUI {
 
   private void startButtonPressed () {
     menuSettingsPanel.setVisible(true);
+    startButton.setVisible(false);
   }
 
   private void easyButtonPressed () {
@@ -83,11 +85,6 @@ public class MainMenuGUI {
   private void difficultyButtonPressed() {
 
     memoryGame.setScene(memoryGame.getGameScene());
-  }
-
-  public void setLogic (GameLogic gameLogic) {
-
-    this.gameLogic = gameLogic;
   }
 
   public VBox getMenuSettingsPanel() {

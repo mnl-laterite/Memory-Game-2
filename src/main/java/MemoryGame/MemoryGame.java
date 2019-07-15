@@ -23,13 +23,11 @@ public class MemoryGame extends Application
     this.primaryStage = primaryStage;
     primaryStage.setTitle("Memory Training Game!");
 
-    mainMenuGUI = new MainMenuGUI(this);
-    gamePlayGUI = new GamePlayGUI(this);
-    endGameGUI = new EndGameGUI(this);
-
     gameLogic = new GameLogic(Difficulty.DEFAULT);
 
-    mainMenuGUI.setLogic(gameLogic);
+    mainMenuGUI = new MainMenuGUI(this, gameLogic);
+    gamePlayGUI = new GamePlayGUI(this, gameLogic);
+    endGameGUI = new EndGameGUI(this, gameLogic);
 
     mainScene = new Scene(mainMenuGUI.getMenuSettingsPanel(),480,800);
     mainScene.getStylesheets().add(this.getClass().getResource("/mainMenuStyle.css").toExternalForm());
