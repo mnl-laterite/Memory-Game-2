@@ -1,12 +1,12 @@
 package MemoryGame;
 
+import MemoryGame.game.Difficulty;
+import MemoryGame.game.GameLogic;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class MemoryGame extends Application
-{
-
+public class Main extends Application {
   private static Stage primaryStage;
 
   private GameLogic gameLogic;
@@ -29,7 +29,7 @@ public class MemoryGame extends Application
     gamePlayGUI = new GamePlayGUI(this, gameLogic);
     endGameGUI = new EndGameGUI(this, gameLogic);
 
-    mainScene = new Scene(mainMenuGUI.getMenuSettingsPanel(),480,800);
+    mainScene = new Scene(mainMenuGUI.getMenuSettingsPanel(), 480, 800);
     mainScene.getStylesheets().add(this.getClass().getResource("/mainMenuStyle.css").toExternalForm());
 
     gameScene = new Scene(gamePlayGUI.getGameLayout(), 800, 900);
@@ -41,23 +41,23 @@ public class MemoryGame extends Application
     primaryStage.show();
   }
 
-  public void setScene (Scene scene) {
+  public void setScene(Scene scene) {
     this.primaryStage.setScene(scene);
   }
 
-  public Scene getMainScene () {
+  public Scene getMainScene() {
     return mainScene;
   }
 
-  public Scene getGameScene () {
+  public Scene getGameScene() {
     return gameScene;
   }
 
-  public Scene getEndScene () {
+  public Scene getEndScene() {
     return endScene;
   }
 
-  public static void main (String[] args) {
+  public static void main(String[] args) {
     launch(args);
   }
 }

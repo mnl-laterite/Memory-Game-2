@@ -1,5 +1,7 @@
 package MemoryGame;
 
+import MemoryGame.game.Difficulty;
+import MemoryGame.game.GameLogic;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -19,7 +21,7 @@ import java.awt.event.MouseEvent;
 
 public class GamePlayGUI {
 
-  private MemoryGame memoryGame;
+  private Main main;
   private GameLogic gameLogic;
 
   private Pane canvasContainer;
@@ -36,9 +38,9 @@ public class GamePlayGUI {
   private Button resetButton;
   private Button getHintButton;
 
-  public GamePlayGUI (MemoryGame memoryGame, GameLogic gameLogic) {
+  public GamePlayGUI (Main main, GameLogic gameLogic) {
 
-    this.memoryGame = memoryGame;
+    this.main = main;
     this.gameLogic = gameLogic;
 
     gameLayout = new BorderPane();
@@ -77,8 +79,8 @@ public class GamePlayGUI {
 
           for (int i = 0; i<limit; ++i) {
             for (int j = 0; j<limit; ++j) {
-              if (gameLogic.getMapContents(i,j) > 0)
-              gc.drawImage(gamePieces[gameLogic.getMapContents(i,j)],i*100+10,j*100+10,100,100);
+              if (gameLogic.getMapContents(i,j) < 0)
+              gc.drawImage(gamePieces[(-1)*gameLogic.getMapContents(i,j)],i*100+10,j*100+10,100,100);
               else
                 gc.drawImage(gamePieces[0], i*100+10,j*100+10,100,100);
             }
@@ -128,7 +130,7 @@ public class GamePlayGUI {
 
   private void resetButtonPressed() {
     gameLogic.resetGame(Difficulty.DEFAULT);
-    memoryGame.setScene(memoryGame.getMainScene());
+    main.setScene(main.getMainScene());
   }
 
   private void quitButtonPressed() {
@@ -140,7 +142,7 @@ public class GamePlayGUI {
   }
 
   private void setEndGameGUI() {
-    memoryGame.setScene(memoryGame.getEndScene());
+    main.setScene(main.getEndScene());
   }
 
   public BorderPane getGameLayout () {

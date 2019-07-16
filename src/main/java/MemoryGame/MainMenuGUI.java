@@ -1,5 +1,7 @@
 package MemoryGame;
 
+import MemoryGame.game.Difficulty;
+import MemoryGame.game.GameLogic;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -7,7 +9,7 @@ import javafx.scene.layout.*;
 
 public class MainMenuGUI {
 
-  private MemoryGame memoryGame;
+  private Main main;
 
   private VBox menuLayout;
   private HBox menuSettingsPanel;
@@ -21,9 +23,9 @@ public class MainMenuGUI {
 
   private GameLogic gameLogic;
 
-  public MainMenuGUI(MemoryGame memoryGame, GameLogic gameLogic) {
+  public MainMenuGUI(Main main, GameLogic gameLogic) {
 
-    this.memoryGame = memoryGame;
+    this.main = main;
     this.gameLogic = gameLogic;
 
     menuLayout = new VBox();
@@ -84,7 +86,7 @@ public class MainMenuGUI {
 
   private void difficultyButtonPressed() {
 
-    memoryGame.setScene(memoryGame.getGameScene());
+    main.setScene(main.getGameScene());
   }
 
   public VBox getMenuSettingsPanel() {
