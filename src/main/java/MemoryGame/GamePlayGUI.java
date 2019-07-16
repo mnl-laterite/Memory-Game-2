@@ -7,7 +7,6 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,8 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-
-import java.awt.event.MouseEvent;
 
 public class GamePlayGUI {
 
@@ -30,6 +27,7 @@ public class GamePlayGUI {
   private GraphicsContext gc;
   private Timeline animationLoop;
   private long gameStartTime;
+  private int piecesTurned;
 
   private BorderPane gameLayout;
   private HBox gameOptions;
@@ -61,35 +59,64 @@ public class GamePlayGUI {
 
     gc = gameCanvas.getGraphicsContext2D();
 
-    animationLoop = new Timeline();
-    animationLoop.setCycleCount(Timeline.INDEFINITE);
-    //gameCanvas.setOnMouseClicked(gameLogic.getMouseClickDetector());
+    piecesTurned = 0;
 
-    gameStartTime = System.currentTimeMillis();
+    gameCanvas.setOnMouseClicked(event -> {
 
-    KeyFrame kf = new KeyFrame(
+      int i = (int) event.getX() / 100;
+      int j = (int) event.getY() / 100;
+
+      if (i <= gameLogic.getGamePlayMapDepth() && j <= gameLogic.getGamePlayMapDepth()) {
+
+        if (gameLogic.getMapContents(i,j) != 0) {
+
+          if (gameLogic.getMapContents(i,j) < 0) {
+            gameLogic.turnPiece(i,j);
+            piecesTurned++;
+          }
+        }
+
+        if (gameLogic.pairFound()) {
+          gameLogic.eliminateFoundPairs();
+          piecesTurned = 0;
+        }
+        else {
+          if (piecesTurned > 2) {
+            piecesTurned = 1;
+            gameLogic.hideUnfoundPairs();
+            gameLogic.turnPiece(i,j);
+          }
+        }
+
+      }
+
+    });
+
+      animationLoop = new Timeline();
+      animationLoop.setCycleCount(Timeline.INDEFINITE);
+
+      KeyFrame kf = new KeyFrame(
       Duration.seconds(0.017),
       new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
 
-          //needs game logic completion
           int limit = gameLogic.getGamePlayMapDepth();
           gc.clearRect(0,0,gameCanvas.getWidth(),gameCanvas.getHeight());
 
-          for (int i = 0; i<limit; ++i) {
-            for (int j = 0; j<limit; ++j) {
-              if (gameLogic.getMapContents(i,j) < 0)
-              gc.drawImage(gamePieces[(-1)*gameLogic.getMapContents(i,j)],i*100+10,j*100+10,100,100);
+          for (int i = 0; i < limit; ++i) {
+            for (int j = 0; j < limit; ++j) {
+              if (gameLogic.getMapContents(i,j) > 0)
+              gc.drawImage(gamePieces[gameLogic.getMapContents(i,j)],i*100,j*100,100,100);
               else
-                gc.drawImage(gamePieces[0], i*100+10,j*100+10,100,100);
+                if (gameLogic.getMapContents(i,j) < 0)
+                gc.drawImage(gamePieces[0], i*100,j*100,100,100);
             }
           }
 
         }
       }
     );
-
     animationLoop.getKeyFrames().add( kf );
     animationLoop.play();
 
@@ -121,11 +148,6 @@ public class GamePlayGUI {
     gameOptions.setPadding(new Insets(10,10,10,10));
     gameOptions.setAlignment(Pos.BOTTOM_RIGHT);
 
-  }
-
-  public Dimension2D getClickCoordinates (MouseEvent event) {
-    Dimension2D dim = new Dimension2D(event.getX(), event.getY());
-    return dim;
   }
 
   private void resetButtonPressed() {
