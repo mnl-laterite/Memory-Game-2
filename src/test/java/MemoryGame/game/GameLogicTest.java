@@ -285,5 +285,5 @@ public class GameLogicTest {
       for (j1 = 0; j1 < indexBound; ++j1)
         assertEquals(0,gameLogic.getMapContents(i1,j1));
   }
-  
+
 }
