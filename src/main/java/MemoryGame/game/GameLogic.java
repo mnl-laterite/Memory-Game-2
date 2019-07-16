@@ -9,7 +9,6 @@ public class GameLogic {
   private int gamePlayMapDepth;
   private short pairsFound;
   private short pairsTotal;
-  private short piecesTurned;
 
   public GameLogic(Difficulty difficulty) {
 
@@ -21,7 +20,6 @@ public class GameLogic {
   public void resetGame(Difficulty difficulty) {
 
     pairsFound = 0;
-    piecesTurned = 0;
     setDifficulty(difficulty);
     shuffleGamePieces();
 
@@ -57,6 +55,8 @@ public class GameLogic {
           gamePlayMap[i][j] = 0;
 
       }
+
+    pairsFound++;
 
   }
 
