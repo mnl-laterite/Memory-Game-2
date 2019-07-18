@@ -91,7 +91,8 @@ public class MainMenuGUI {
   }
 
   private void difficultyButtonPressed() {
-
+    startButton.setVisible(true);
+    menuSettingsPanel.setVisible(false);
     main.setScene(main.getGameScene());
   }
 

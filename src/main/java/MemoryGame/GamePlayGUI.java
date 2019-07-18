@@ -143,16 +143,13 @@ public class GamePlayGUI {
 
     gameOptions = new HBox();
 
-    getHintButton = new Button("Get Hint!");
-    getHintButton.setOnAction(e -> getHintButtonPressed());
-
     quitButton = new Button("Quit.");
     quitButton.setOnAction(e -> quitButtonPressed());
 
     resetButton = new Button("Reset");
     resetButton.setOnAction(e -> resetButtonPressed());
 
-    gameOptions.getChildren().addAll(resetButton, getHintButton, quitButton);
+    gameOptions.getChildren().addAll(resetButton, quitButton);
     gameOptions.setSpacing(10);
     gameOptions.setPadding(new Insets(10,10,10,10));
     gameOptions.setAlignment(Pos.BOTTOM_RIGHT);
@@ -166,10 +163,6 @@ public class GamePlayGUI {
 
   private void quitButtonPressed() {
     Platform.exit();
-  }
-
-  private void getHintButtonPressed() {
-    setEndGameGUI(); //temporary
   }
 
   private void setEndGameGUI() {

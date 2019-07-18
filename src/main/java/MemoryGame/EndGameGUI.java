@@ -66,7 +66,6 @@ public class EndGameGUI {
 
   private void playAgainButtonPressed () {
     endGameSettingsPanel.setVisible(true);
-    playAgainButton.setVisible(false);
   }
 
   private void quitButtonPressed () {
@@ -74,6 +73,7 @@ public class EndGameGUI {
   }
 
   private void difficultyButtonPressed() {
+    endGameSettingsPanel.setVisible(false);
     main.setScene(main.getGameScene());
   }
 
