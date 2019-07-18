@@ -7,8 +7,8 @@ public class GameLogic {
 
   private int[][] gamePlayMap;
   private int gamePlayMapDepth;
-  private short pairsFound;
-  private short pairsTotal;
+  private int pairsFound;
+  private int pairsTotal;
 
   public GameLogic(Difficulty difficulty) {
 
@@ -22,26 +22,33 @@ public class GameLogic {
     pairsFound = 0;
     setDifficulty(difficulty);
     shuffleGamePieces();
-
   }
 
-  public void turnPiece(int i, int j) {
+  public boolean pieceTurned(int rowIndex, int colIndex) {
+    return gamePlayMap[rowIndex][colIndex] > 0;
+  }
 
-    gamePlayMap[i][j] *= -1;
+  public boolean pieceEliminated (int rowIndex, int colIndex) {
+    return gamePlayMap[rowIndex][colIndex] == 0;
+  }
 
+  public void turnPiece(int rowIndex, int colIndex) {
+    gamePlayMap[rowIndex][colIndex] *= -1;
   }
 
   public void hideUnfoundPairs () {
 
     int i, j;
+
     for (i = 0; i < gamePlayMapDepth; ++i)
       for (j = 0; j < gamePlayMapDepth; ++j) {
-
-        if (gamePlayMap[i][j] > 0)
-          gamePlayMap[i][j] *= -1;
-
+        if (pieceTurned(i,j))
+          turnPiece(i,j);
       }
+  }
 
+  private void eliminatePiece(int rowIndex, int colIndex) {
+    gamePlayMap[rowIndex][colIndex] = 0;
   }
 
   public void eliminateFoundPairs () {
@@ -50,30 +57,27 @@ public class GameLogic {
 
     for (i = 0; i < gamePlayMapDepth; ++i)
       for (j = 0; j < gamePlayMapDepth; ++j) {
-
-        if (gamePlayMap[i][j] > 0)
-          gamePlayMap[i][j] = 0;
-
+        if (pieceTurned(i,j))
+          eliminatePiece(i,j);
       }
 
     pairsFound++;
-
   }
 
   public boolean pairFound() {
 
     int pointsSearched = 0;
     int i, j;
-    Dimension2D pointOne = new Dimension2D(-1, -1);
-    Dimension2D pointTwo = new Dimension2D(-1, -1);
+
+    Dimension2D pieceOne = new Dimension2D(-1, -1);
+    Dimension2D pieceTwo = new Dimension2D(-1, -1);
+
     boolean searching = true;
 
     for (i = 0; i < gamePlayMapDepth && searching; ++i)
       for (j = 0; j < gamePlayMapDepth; ++j) {
-
-        if (gamePlayMap[i][j] > 0)
-        {
-          pointOne = new Dimension2D(i, j);
+        if (pieceTurned(i,j)) {
+          pieceOne = new Dimension2D(i, j);
           searching = false;
           break;
         }
@@ -87,25 +91,23 @@ public class GameLogic {
 
     for (i = gamePlayMapDepth - 1; i >= 0 && searching; --i)
       for (j = gamePlayMapDepth - 1; j >= 0; --j) {
-
-        if (gamePlayMap[i][j] > 0) {
-          pointTwo = new Dimension2D(i, j);
+        if (pieceTurned(i,j)) {
+          pieceTwo = new Dimension2D(i, j);
           searching = false;
           break;
         }
       }
 
-    if (pointOne.getWidth() == -1 || pointTwo.getWidth() == -1)
+    if (pieceOne.getWidth() == -1 || pieceTwo.getWidth() == -1)
       return false;
 
-    if (pointOne.getWidth() == pointTwo.getWidth() && pointOne.getHeight() == pointTwo.getHeight())
+    if (pieceOne.getWidth() == pieceTwo.getWidth() && pieceOne.getHeight() == pieceTwo.getHeight())
       return false;
 
-    if (gamePlayMap[(int) pointOne.getWidth()][(int) pointOne.getHeight()] ==
-        gamePlayMap[(int) pointTwo.getWidth()][(int) pointTwo.getHeight()])
+    if (gamePlayMap[(int) pieceOne.getWidth()][(int) pieceOne.getHeight()] ==
+        gamePlayMap[(int) pieceTwo.getWidth()][(int) pieceTwo.getHeight()])
       return true;
       else return false;
-
   }
 
   public int getPairsFound() {
@@ -120,34 +122,13 @@ public class GameLogic {
     return gamePlayMapDepth;
   }
 
-  public int getMapContents(int i, int j) {
-    return gamePlayMap[i][j];
+  public int getMapContents(int rowIndex, int colIndex) {
+    return gamePlayMap[rowIndex][colIndex];
   }
 
   private void setDifficulty (Difficulty difficulty) {
-
-    switch (difficulty) {
-
-      case EASY:
-        pairsTotal = 4;
-        gamePlayMapDepth = 3;
-        break;
-
-      case HARD:
-        pairsTotal = 12;
-        gamePlayMapDepth = 5;
-        break;
-
-      case DEFAULT:
-        pairsTotal = 8;
-        gamePlayMapDepth = 4;
-        break;
-
-      default:
-        pairsTotal = 8;
-        gamePlayMapDepth = 4;
-        break;
-    }
+    pairsTotal = difficulty.pairsTotal;
+    gamePlayMapDepth = difficulty.gamePlayMapDepth;
   }
 
   private void shuffleGamePieces () {

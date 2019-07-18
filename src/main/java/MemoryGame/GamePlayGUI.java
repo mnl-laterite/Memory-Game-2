@@ -53,7 +53,7 @@ public class GamePlayGUI {
 
     gamePieces[0] = new Image(this.getClass().getResource("/gamepieces/testSprite2.png").toExternalForm());
 
-    for (int i=1; i<=12; ++i) {
+    for (int i = 1; i <= 12; ++i) {
       gamePieces[i] = new Image(this.getClass().getResource("/gamepieces/" + i + ".webp").toExternalForm());
     }
 
@@ -68,9 +68,9 @@ public class GamePlayGUI {
 
       if (i <= gameLogic.getGamePlayMapDepth() && j <= gameLogic.getGamePlayMapDepth()) {
 
-        if (gameLogic.getMapContents(i,j) != 0) {
+        if (! gameLogic.pieceEliminated(i,j)) {
 
-          if (gameLogic.getMapContents(i,j) < 0) {
+          if (! gameLogic.pieceTurned(i,j)) {
             gameLogic.turnPiece(i,j);
             piecesTurned++;
           }
@@ -106,10 +106,10 @@ public class GamePlayGUI {
 
           for (int i = 0; i < limit; ++i) {
             for (int j = 0; j < limit; ++j) {
-              if (gameLogic.getMapContents(i,j) > 0)
+              if (gameLogic.pieceTurned(i,j))
               gc.drawImage(gamePieces[gameLogic.getMapContents(i,j)],i*100,j*100,100,100);
               else
-                if (gameLogic.getMapContents(i,j) < 0)
+                if (!gameLogic.pieceTurned(i,j) && !gameLogic.pieceEliminated(i,j))
                 gc.drawImage(gamePieces[0], i*100,j*100,100,100);
             }
           }
