@@ -51,7 +51,7 @@ public class GamePlayGUI {
     gameLayout.setCenter(canvasContainer);
     gameLayout.setBottom(gameOptions);
 
-    gamePieces[0] = new Image(this.getClass().getResource("/gamepieces/testSprite2.png").toExternalForm());
+    gamePieces[0] = new Image(this.getClass().getResource("/gamepieces/tilebackside.png").toExternalForm());
 
     for (int i = 1; i <= 12; ++i) {
       gamePieces[i] = new Image(this.getClass().getResource("/gamepieces/" + i + ".webp").toExternalForm());
