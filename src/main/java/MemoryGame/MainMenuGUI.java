@@ -31,10 +31,7 @@ public class MainMenuGUI {
     menuLayout = new VBox();
     menuLayout.setSpacing(10);
 
-    menuSettingsPanel = new HBox();
-    menuSettingsPanel.setSpacing(10);
-    menuSettingsPanel.setVisible(false);
-    menuSettingsPanel.setAlignment(Pos.CENTER);
+    createMenuSettingsPanel();
 
     startButton = new Button("Start!");
     startButton.setOnAction(e -> startButtonPressed());
@@ -44,7 +41,16 @@ public class MainMenuGUI {
 
     menuLayout.setAlignment(Pos.CENTER);
     menuLayout.getChildren().addAll(startButton, menuSettingsPanel, quitButton);
-    menuLayout.setId("menu");
+    menuLayout.setId("menulayout");
+
+  }
+
+  private void createMenuSettingsPanel () {
+
+    menuSettingsPanel = new HBox();
+    menuSettingsPanel.setSpacing(10);
+    menuSettingsPanel.setVisible(false);
+    menuSettingsPanel.setAlignment(Pos.CENTER);
 
     easyButton = new Button("Easy (3x3)");
     menuSettingsPanel.getChildren().add(easyButton);
@@ -89,7 +95,7 @@ public class MainMenuGUI {
     main.setScene(main.getGameScene());
   }
 
-  public VBox getMenuSettingsPanel() {
+  public VBox getMenuLayout() {
     return menuLayout;
   }
 

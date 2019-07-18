@@ -29,13 +29,14 @@ public class Main extends Application {
     gamePlayGUI = new GamePlayGUI(this, gameLogic);
     endGameGUI = new EndGameGUI(this, gameLogic);
 
-    mainScene = new Scene(mainMenuGUI.getMenuSettingsPanel(), 480, 800);
+    mainScene = new Scene(mainMenuGUI.getMenuLayout(), 480, 800);
     mainScene.getStylesheets().add(this.getClass().getResource("/mainMenuStyle.css").toExternalForm());
 
     gameScene = new Scene(gamePlayGUI.getGameLayout(), 800, 900);
     gameScene.getStylesheets().add(this.getClass().getResource("/gamePlayStyle.css").toExternalForm());
 
     endScene = new Scene(endGameGUI.getEndGameLayout(), 480, 800);
+    endScene.getStylesheets().add(this.getClass().getResource("/endGameStyle.css").toExternalForm());
 
     primaryStage.setScene(mainScene);
     primaryStage.show();

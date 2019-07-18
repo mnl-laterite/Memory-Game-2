@@ -63,8 +63,12 @@ public class GamePlayGUI {
 
     gameCanvas.setOnMouseClicked(event -> {
 
-      int i = (int) event.getX() / 100;
-      int j = (int) event.getY() / 100;
+      int drawLimit = gameLogic.getGamePlayMapDepth();
+      double boxSizeX = gameCanvas.getWidth() / drawLimit;
+      double boxSizeY = gameCanvas.getHeight() / drawLimit;
+
+      int i = (int) event.getX() / (int)boxSizeX;
+      int j = (int) event.getY() / (int)boxSizeY;
 
       if (i <= gameLogic.getGamePlayMapDepth() && j <= gameLogic.getGamePlayMapDepth()) {
 
@@ -75,6 +79,7 @@ public class GamePlayGUI {
           }
 
         if (gameLogic.pairFound()) {
+          gameLogic.hideUnfoundPairs();
           piecesTurned = 0;
         }
         else {
@@ -85,6 +90,10 @@ public class GamePlayGUI {
           }
         }
 
+      }
+
+      if (gameLogic.getPairsTotal() - gameLogic.getPairsFound() == 0) {
+        setEndGameGUI();
       }
 
     });
@@ -98,16 +107,19 @@ public class GamePlayGUI {
         @Override
         public void handle(ActionEvent event) {
 
-          int limit = gameLogic.getGamePlayMapDepth();
+          int drawLimit = gameLogic.getGamePlayMapDepth();
+          double boxSizeX = gameCanvas.getWidth() / drawLimit;
+          double boxSizeY = gameCanvas.getHeight() / drawLimit;
+
           gc.clearRect(0,0,gameCanvas.getWidth(),gameCanvas.getHeight());
 
-          for (int i = 0; i < limit; ++i) {
-            for (int j = 0; j < limit; ++j) {
+          for (int i = 0; i < drawLimit; ++i) {
+            for (int j = 0; j < drawLimit; ++j) {
               if (gameLogic.pieceTurned(i,j))
-              gc.drawImage(gamePieces[gameLogic.getMapContents(i,j)],i*100,j*100,100,100);
+              gc.drawImage(gamePieces[gameLogic.getMapContents(i,j)],i*boxSizeX+10,j*boxSizeY+10,boxSizeX-10,boxSizeY-10);
               else
                 if (!gameLogic.pieceTurned(i,j) && !gameLogic.pieceEliminated(i,j))
-                gc.drawImage(gamePieces[0], i*100,j*100,100,100);
+                gc.drawImage(gamePieces[0], i*boxSizeX+10,j*boxSizeY+10,boxSizeX-10,boxSizeY-10);
             }
           }
 
