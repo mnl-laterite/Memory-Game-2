@@ -51,19 +51,6 @@ public class GameLogic {
     gamePlayMap[rowIndex][colIndex] = 0;
   }
 
-  public void eliminateFoundPairs () {
-
-    int i, j;
-
-    for (i = 0; i < gamePlayMapDepth; ++i)
-      for (j = 0; j < gamePlayMapDepth; ++j) {
-        if (pieceTurned(i,j))
-          eliminatePiece(i,j);
-      }
-
-    pairsFound++;
-  }
-
   public boolean pairFound() {
 
     int pointsSearched = 0;
@@ -104,9 +91,15 @@ public class GameLogic {
     if (pieceOne.getWidth() == pieceTwo.getWidth() && pieceOne.getHeight() == pieceTwo.getHeight())
       return false;
 
-    if (gamePlayMap[(int) pieceOne.getWidth()][(int) pieceOne.getHeight()] ==
-        gamePlayMap[(int) pieceTwo.getWidth()][(int) pieceTwo.getHeight()])
+    if (gamePlayMap[(int)pieceOne.getWidth()][(int)pieceOne.getHeight()] ==
+        gamePlayMap[(int)pieceTwo.getWidth()][(int)pieceTwo.getHeight()]) {
+
+      eliminatePiece((int)pieceOne.getWidth(),(int)pieceOne.getHeight());
+      eliminatePiece((int)pieceTwo.getWidth(),(int)pieceTwo.getHeight());
+      pairsFound++;
+
       return true;
+    }
       else return false;
   }
 

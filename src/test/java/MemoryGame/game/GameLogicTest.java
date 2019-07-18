@@ -80,39 +80,6 @@ public class GameLogicTest {
   }
 
   @Test
-  public void testEliminateFoundPairs () {
-    GameLogic gameLogic = new GameLogic(Difficulty.HARD);
-
-    int temp = gameLogic.getMapContents(0,0);
-    int searchBound = gameLogic.getGamePlayMapDepth();
-    int i, itemp = 0, j, jtemp = 0;
-    boolean search = true;
-
-    for (i = searchBound -1 ; i >= 0 && search == true; --i)
-      for (j = searchBound - 1; j >= 0; --j) {
-
-        if (gameLogic.getMapContents(i, j) == temp) {
-          itemp = i;
-          jtemp = j;
-          search = false;
-        }
-        break;
-      }
-
-    gameLogic.turnPiece(0,0);
-    gameLogic.turnPiece(itemp, jtemp);
-
-    assert gameLogic.getMapContents(0,0) > 0;
-    assert gameLogic.getMapContents(itemp,jtemp) > 0;
-
-    gameLogic.eliminateFoundPairs();
-
-    assertEquals(0,gameLogic.getMapContents(0,0));
-    assertEquals(0,gameLogic.getMapContents(itemp,jtemp));
-
-  }
-
-  @Test
   public void testFullGameLoopEasy () {
     GameLogic gameLogic = new GameLogic(Difficulty.EASY);
 
@@ -152,7 +119,6 @@ public class GameLogicTest {
 
 
       if (gameLogic.pairFound()) {
-        gameLogic.eliminateFoundPairs();
         piecesTurned = 0;
       }
       else {
@@ -210,7 +176,6 @@ public class GameLogicTest {
 
 
       if (gameLogic.pairFound()) {
-        gameLogic.eliminateFoundPairs();
         piecesTurned = 0;
       }
       else {
@@ -268,7 +233,6 @@ public class GameLogicTest {
 
 
       if (gameLogic.pairFound()) {
-        gameLogic.eliminateFoundPairs();
         piecesTurned = 0;
       }
       else {

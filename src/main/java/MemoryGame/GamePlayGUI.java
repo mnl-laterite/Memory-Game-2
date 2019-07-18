@@ -68,16 +68,13 @@ public class GamePlayGUI {
 
       if (i <= gameLogic.getGamePlayMapDepth() && j <= gameLogic.getGamePlayMapDepth()) {
 
-        if (! gameLogic.pieceEliminated(i,j)) {
-
+        if (! gameLogic.pieceEliminated(i,j))
           if (! gameLogic.pieceTurned(i,j)) {
             gameLogic.turnPiece(i,j);
             piecesTurned++;
           }
-        }
 
         if (gameLogic.pairFound()) {
-          gameLogic.eliminateFoundPairs();
           piecesTurned = 0;
         }
         else {
