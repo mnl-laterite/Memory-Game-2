@@ -54,17 +54,17 @@ public class GameLogicTest {
     int temp = gameLogic.getMapContents(0,0);
     int searchBound = gameLogic.getGamePlayMapDepth();
     int i, itemp = 0, j, jtemp = 0;
-    boolean search = true;
+    boolean searching = true;
 
-    for (i = searchBound -1 ; i >= 0 && search == true; --i)
+    for (i = searchBound -1 ; i >= 0 && searching; --i)
       for (j = searchBound - 1; j >= 0; --j) {
 
         if (gameLogic.getMapContents(i, j) == temp) {
           itemp = i;
           jtemp = j;
-          search = false;
+          searching = false;
+          break;
         }
-        break;
       }
 
     assert gameLogic.getMapContents(0,0) == gameLogic.getMapContents(itemp,jtemp);

@@ -82,14 +82,12 @@ public class GamePlayGUI {
           gameLogic.hideUnfoundPairs();
           piecesTurned = 0;
         }
-        else {
+        else
           if (piecesTurned > 2) {
             piecesTurned = 1;
             gameLogic.hideUnfoundPairs();
             gameLogic.turnPiece(i,j);
           }
-        }
-
       }
 
       if (gameLogic.getPairsTotal() - gameLogic.getPairsFound() == 0) {
