@@ -3,37 +3,46 @@ package MemoryGame;
 import MemoryGame.game.Difficulty;
 import MemoryGame.game.GameLogic;
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * A memory game app.
+ * @author mnl-laterite
+ */
 public class Main extends Application {
-  private static Stage primaryStage;
-
-  private GameLogic gameLogic;
-  private MainMenuGUI mainMenuGUI;
-  private GamePlayGUI gamePlayGUI;
-  private EndGameGUI endGameGUI;
 
   private Scene scene;
 
+  /**
+   * Parent node for the menu screen layout.
+   */
   private VBox menuLayout;
+
+  /**
+   * Parent node for the gameplay screen layout.
+   */
   private BorderPane gameLayout;
+
+  /**
+   * Parent node for the end game screen layout.
+   */
   private VBox endGameLayout;
 
   @Override
-  public void start(Stage primaryStage) throws Exception {
+  public void start(Stage primaryStage) {
 
-    this.primaryStage = primaryStage;
     primaryStage.setTitle("Memory Training Game!");
 
-    gameLogic = new GameLogic(Difficulty.DEFAULT);
+    //creating the underlying game board on which the game is played (saves game state)
+    GameLogic gameLogic = new GameLogic(Difficulty.DEFAULT);
 
-    mainMenuGUI = new MainMenuGUI(this, gameLogic);
-    gamePlayGUI = new GamePlayGUI(this, gameLogic);
-    endGameGUI = new EndGameGUI(this, gameLogic);
+    //creating the 3 screens of the app
+    MainMenuGUI mainMenuGUI = new MainMenuGUI(this, gameLogic);
+    GamePlayGUI gamePlayGUI = new GamePlayGUI(this, gameLogic);
+    EndGameGUI endGameGUI = new EndGameGUI(this, gameLogic);
 
     menuLayout = mainMenuGUI.getMenuLayout();
     gameLayout = gamePlayGUI.getGameLayout();
@@ -44,20 +53,19 @@ public class Main extends Application {
     endGameLayout.getStylesheets().add(this.getClass().getResource("/endGameStyle.css").toExternalForm());
 
     scene = new Scene(menuLayout, 600, 800);
-
     primaryStage.setScene(scene);
     primaryStage.show();
   }
 
-  public void switchToMenuLayout () {
+  void switchToMenuLayout () {
     scene.setRoot(menuLayout);
   }
 
-  public void switchToGameLayout () {
+  void switchToGameLayout () {
     scene.setRoot(gameLayout);
   }
 
-  public void switchToEndGameLayout () {
+  void switchToEndGameLayout () {
     scene.setRoot(endGameLayout);
   }
 

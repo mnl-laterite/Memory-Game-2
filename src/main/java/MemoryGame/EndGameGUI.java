@@ -8,93 +8,138 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class EndGameGUI {
+/**
+ * Describes the end game screen.
+ * @author mnl-laterite
+ */
+class EndGameGUI {
 
+  /**
+   * Instance of the main app class, needed to change game screens.
+   */
   private Main main;
+
+  /**
+   * Instance of the game board that records the current state of the game.
+   */
   private GameLogic gameLogic;
 
+  /**
+   * Parent node for the end game screen layout.
+   */
   private VBox endGameLayout;
-  private HBox endGameSettingsPanel;
 
-  private Button easyButton;
-  private Button defaultButton;
-  private Button hardButton;
+  /**
+   * Container node for the difficulty setting buttons.
+   */
+  private HBox difficultySettingPanel;
 
+  /**
+   * Play again button for the game.
+   */
   private Button playAgainButton;
-  private Button quitButton;
 
-  public EndGameGUI (Main main, GameLogic gameLogic) {
+  /**
+   * Creates the end game screen of the game.
+   * @param main instance of the main app class.
+   * @param gameLogic instance of the underlying game board.
+   */
+  EndGameGUI (Main main, GameLogic gameLogic) {
 
     this.main = main;
     this.gameLogic = gameLogic;
     endGameLayout = new VBox();
     endGameLayout.setSpacing(10);
 
-    createEndGameSettingsPanel();
+    createDifficultySettingsPanel();
 
     playAgainButton = new Button("Play again?");
-    playAgainButton.setOnAction(e -> playAgainButtonPressed());
+    playAgainButton.setOnAction(e -> showDifficultySettingsPanel());
 
-    quitButton = new Button("Quit.");
+    Button quitButton = new Button("Quit.");
     quitButton.setOnAction(e -> quitButtonPressed());
 
     endGameLayout.setAlignment(Pos.CENTER);
-    endGameLayout.getChildren().addAll(playAgainButton,endGameSettingsPanel,quitButton);
+    endGameLayout.getChildren().addAll(playAgainButton, difficultySettingPanel,quitButton);
     endGameLayout.setId("endgamelayout");
   }
 
-  private void createEndGameSettingsPanel () {
+  /**
+   * Creates the difficulty settings panel.
+   */
+  private void createDifficultySettingsPanel() {
 
-    endGameSettingsPanel = new HBox();
-    endGameSettingsPanel.setSpacing(10);
-    endGameSettingsPanel.setVisible(false);
-    endGameSettingsPanel.setAlignment(Pos.CENTER);
+    difficultySettingPanel = new HBox();
+    difficultySettingPanel.setSpacing(10);
+    difficultySettingPanel.setVisible(false);
+    difficultySettingPanel.setAlignment(Pos.CENTER);
 
-    easyButton = new Button("Easy (3x3)");
-    endGameSettingsPanel.getChildren().add(easyButton);
-    easyButton.setOnAction(e -> easyButtonPressed());
+    Button easyButton = new Button("Easy (3x3)");
+    difficultySettingPanel.getChildren().add(easyButton);
+    easyButton.setOnAction(e -> setDifficultyToEasy());
 
-    defaultButton = new Button("Normal (4x4)");
-    endGameSettingsPanel.getChildren().add(defaultButton);
-    defaultButton.setOnAction(e -> defaultButtonPressed());
+    Button defaultButton = new Button("Normal (4x4)");
+    difficultySettingPanel.getChildren().add(defaultButton);
+    defaultButton.setOnAction(e -> setDifficultyToDefault());
 
-    hardButton = new Button("Hard (5x5)");
-    endGameSettingsPanel.getChildren().add(hardButton);
-    hardButton.setOnAction(e -> hardButtonPressed());
+    Button hardButton = new Button("Hard (5x5)");
+    difficultySettingPanel.getChildren().add(hardButton);
+    hardButton.setOnAction(e -> setDifficultyToHard());
 
   }
 
-  private void playAgainButtonPressed () {
-    endGameSettingsPanel.setVisible(true);
+  /**
+   * Shows the difficulty settings for a new game and hides the play again button.
+   */
+  private void showDifficultySettingsPanel () {
+    difficultySettingPanel.setVisible(true);
     playAgainButton.setVisible(false);
   }
 
+  /**
+   * Exits the application.
+   */
   private void quitButtonPressed () {
     Platform.exit();
   }
 
-  private void difficultyButtonPressed() {
+  /**
+   * Restarts the game by changing the current screen to the game play screen.
+   */
+  private void restartGame () {
     playAgainButton.setVisible(true);
-    endGameSettingsPanel.setVisible(false);
+    difficultySettingPanel.setVisible(false);
     main.switchToGameLayout();
   }
 
-  private void easyButtonPressed () {
+  /**
+   * Sets the game difficulty to easy and restarts the game.
+   */
+  private void setDifficultyToEasy () {
     gameLogic.resetGame(Difficulty.EASY);
-    difficultyButtonPressed();
+    restartGame();
   }
 
-  private void defaultButtonPressed () {
+  /**
+   * Sets the game difficulty to default and restarts the game.
+   */
+  private void setDifficultyToDefault () {
     gameLogic.resetGame(Difficulty.DEFAULT);
-    difficultyButtonPressed();
+    restartGame();
   }
 
-  private void hardButtonPressed () {
+  /**
+   * Sets the game difficulty to hard and restarts the game.
+   */
+  private void setDifficultyToHard () {
     gameLogic.resetGame(Difficulty.HARD);
-    difficultyButtonPressed();
+    restartGame();
   }
 
-  public VBox getEndGameLayout () {
+  /**
+   * @return the parent node for the end screen layout.
+   */
+  VBox getEndGameLayout () {
     return endGameLayout;
   }
 }
