@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>D:\Emi\MemoryGame\target\MemoryGame-1.0-SNAPSHOT.jar</jar>
-  <outfile>D:\Emi\MemoryGame\target\Memo.exe</outfile>
+  <outfile>D:\Emi\MemoryGame\target\Memory Game 2.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
@@ -18,7 +18,7 @@
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
-    <minVersion>8</minVersion>
+    <minVersion>1.8.0</minVersion>
     <maxVersion>9</maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>

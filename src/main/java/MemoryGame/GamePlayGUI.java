@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -26,7 +27,6 @@ public class GamePlayGUI {
   private Image[] gamePieces = new Image[25];
   private GraphicsContext gc;
   private Timeline animationLoop;
-  private long gameStartTime;
   private int piecesTurned;
 
   private BorderPane gameLayout;
@@ -34,7 +34,6 @@ public class GamePlayGUI {
 
   private Button quitButton;
   private Button resetButton;
-  private Button getHintButton;
 
   public GamePlayGUI(Main main, GameLogic gameLogic) {
 
@@ -60,42 +59,7 @@ public class GamePlayGUI {
     gc = gameCanvas.getGraphicsContext2D();
 
     piecesTurned = 0;
-
-    gameCanvas.setOnMouseClicked(event -> {
-
-      int drawLimit = gameLogic.getGamePlayMapDepth();
-      double boxSizeX = gameCanvas.getWidth() / drawLimit;
-      double boxSizeY = gameCanvas.getHeight() / drawLimit;
-
-      int i = (int) event.getX() / (int) boxSizeX;
-      int j = (int) event.getY() / (int) boxSizeY;
-
-      if (i <= gameLogic.getGamePlayMapDepth() && j <= gameLogic.getGamePlayMapDepth()) {
-
-        if (!gameLogic.pieceEliminated(i, j)) {
-          if (!gameLogic.pieceTurned(i, j)) {
-            gameLogic.turnPiece(i, j);
-            piecesTurned++;
-          }
-        }
-
-        if (piecesTurned == 2) {
-          if (gameLogic.pairFound()) {
-            gameLogic.hideUnfoundPairs();
-            piecesTurned = 0;
-          }
-        } else if (piecesTurned > 2) {
-          piecesTurned = 1;
-          gameLogic.hideUnfoundPairs();
-          gameLogic.turnPiece(i, j);
-        }
-      }
-
-      if (gameLogic.getPairsTotal() - gameLogic.getPairsFound() == 0) {
-        setEndGameGUI();
-      }
-
-    });
+    gameCanvas.setOnMouseClicked(this::onMouseClicked);
 
     animationLoop = new Timeline();
     animationLoop.setCycleCount(Timeline.INDEFINITE);
@@ -126,7 +90,41 @@ public class GamePlayGUI {
     );
     animationLoop.getKeyFrames().add(kf);
     animationLoop.play();
+  }
 
+  private void onMouseClicked(MouseEvent event) {
+
+    int drawLimit = gameLogic.getGamePlayMapDepth();
+    double boxSizeX = gameCanvas.getWidth() / drawLimit;
+    double boxSizeY = gameCanvas.getHeight() / drawLimit;
+
+    int i = (int) event.getX() / (int) boxSizeX;
+    int j = (int) event.getY() / (int) boxSizeY;
+
+    if (i <= gameLogic.getGamePlayMapDepth() && j <= gameLogic.getGamePlayMapDepth()) {
+
+      if (!gameLogic.pieceEliminated(i, j)) {
+        if (!gameLogic.pieceTurned(i, j)) {
+          gameLogic.turnPiece(i, j);
+          piecesTurned++;
+        }
+      }
+
+      if (piecesTurned == 2) {
+        if (gameLogic.pairFound()) {
+          gameLogic.hideUnfoundPairs();
+          piecesTurned = 0;
+        }
+      } else if (piecesTurned > 2) {
+        piecesTurned = 1;
+        gameLogic.hideUnfoundPairs();
+        gameLogic.turnPiece(i, j);
+      }
+    }
+
+    if (gameLogic.getPairsTotal() - gameLogic.getPairsFound() == 0) {
+      setEndGameGUI();
+    }
   }
 
   private void createGameCanvas() {
