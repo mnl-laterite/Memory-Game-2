@@ -38,12 +38,11 @@ public class GameLogic {
 
   public void hideUnfoundPairs () {
 
-    int i, j;
-
-    for (i = 0; i < gamePlayMapDepth; ++i)
-      for (j = 0; j < gamePlayMapDepth; ++j) {
-        if (pieceTurned(i,j))
-          turnPiece(i,j);
+    for (int i = 0; i < gamePlayMapDepth; ++i)
+      for (int j = 0; j < gamePlayMapDepth; ++j) {
+        if (pieceTurned(i,j)) {
+          turnPiece(i, j);
+        }
       }
   }
 

@@ -36,7 +36,7 @@ public class GamePlayGUI {
   private Button resetButton;
   private Button getHintButton;
 
-  public GamePlayGUI (Main main, GameLogic gameLogic) {
+  public GamePlayGUI(Main main, GameLogic gameLogic) {
 
     this.main = main;
     this.gameLogic = gameLogic;
@@ -67,27 +67,28 @@ public class GamePlayGUI {
       double boxSizeX = gameCanvas.getWidth() / drawLimit;
       double boxSizeY = gameCanvas.getHeight() / drawLimit;
 
-      int i = (int) event.getX() / (int)boxSizeX;
-      int j = (int) event.getY() / (int)boxSizeY;
+      int i = (int) event.getX() / (int) boxSizeX;
+      int j = (int) event.getY() / (int) boxSizeY;
 
       if (i <= gameLogic.getGamePlayMapDepth() && j <= gameLogic.getGamePlayMapDepth()) {
 
-        if (! gameLogic.pieceEliminated(i,j))
-          if (! gameLogic.pieceTurned(i,j)) {
-            gameLogic.turnPiece(i,j);
+        if (!gameLogic.pieceEliminated(i, j)) {
+          if (!gameLogic.pieceTurned(i, j)) {
+            gameLogic.turnPiece(i, j);
             piecesTurned++;
           }
-
-        if (gameLogic.pairFound()) {
-          gameLogic.hideUnfoundPairs();
-          piecesTurned = 0;
         }
-        else
-          if (piecesTurned > 2) {
-            piecesTurned = 1;
+
+        if (piecesTurned == 2) {
+          if (gameLogic.pairFound()) {
             gameLogic.hideUnfoundPairs();
-            gameLogic.turnPiece(i,j);
+            piecesTurned = 0;
           }
+        } else if (piecesTurned > 2) {
+          piecesTurned = 1;
+          gameLogic.hideUnfoundPairs();
+          gameLogic.turnPiece(i, j);
+        }
       }
 
       if (gameLogic.getPairsTotal() - gameLogic.getPairsFound() == 0) {
@@ -96,10 +97,10 @@ public class GamePlayGUI {
 
     });
 
-      animationLoop = new Timeline();
-      animationLoop.setCycleCount(Timeline.INDEFINITE);
+    animationLoop = new Timeline();
+    animationLoop.setCycleCount(Timeline.INDEFINITE);
 
-      KeyFrame kf = new KeyFrame(
+    KeyFrame kf = new KeyFrame(
       Duration.seconds(0.017),
       new EventHandler<ActionEvent>() {
         @Override
@@ -109,35 +110,34 @@ public class GamePlayGUI {
           double boxSizeX = gameCanvas.getWidth() / drawLimit;
           double boxSizeY = gameCanvas.getHeight() / drawLimit;
 
-          gc.clearRect(0,0,gameCanvas.getWidth(),gameCanvas.getHeight());
+          gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 
           for (int i = 0; i < drawLimit; ++i) {
             for (int j = 0; j < drawLimit; ++j) {
-              if (gameLogic.pieceTurned(i,j))
-              gc.drawImage(gamePieces[gameLogic.getMapContents(i,j)],i*boxSizeX+10,j*boxSizeY+10,boxSizeX-10,boxSizeY-10);
-              else
-                if (!gameLogic.pieceTurned(i,j) && !gameLogic.pieceEliminated(i,j))
-                gc.drawImage(gamePieces[0], i*boxSizeX+10,j*boxSizeY+10,boxSizeX-10,boxSizeY-10);
+              if (gameLogic.pieceTurned(i, j))
+                gc.drawImage(gamePieces[gameLogic.getMapContents(i, j)], i * boxSizeX + 10, j * boxSizeY + 10, boxSizeX - 10, boxSizeY - 10);
+              else if (!gameLogic.pieceTurned(i, j) && !gameLogic.pieceEliminated(i, j))
+                gc.drawImage(gamePieces[0], i * boxSizeX + 10, j * boxSizeY + 10, boxSizeX - 10, boxSizeY - 10);
             }
           }
 
         }
       }
     );
-    animationLoop.getKeyFrames().add( kf );
+    animationLoop.getKeyFrames().add(kf);
     animationLoop.play();
 
   }
 
-  private void createGameCanvas () {
+  private void createGameCanvas() {
 
-    gameCanvas = new ResizableCanvas(canvasContainer.widthProperty(),canvasContainer.heightProperty());
+    gameCanvas = new ResizableCanvas(canvasContainer.widthProperty(), canvasContainer.heightProperty());
     canvasContainer.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
     canvasContainer.getChildren().add(gameCanvas);
 
   }
 
-  private void createGameOptions () {
+  private void createGameOptions() {
 
     gameOptions = new HBox();
 
@@ -149,7 +149,7 @@ public class GamePlayGUI {
 
     gameOptions.getChildren().addAll(resetButton, quitButton);
     gameOptions.setSpacing(10);
-    gameOptions.setPadding(new Insets(10,10,10,10));
+    gameOptions.setPadding(new Insets(10, 10, 10, 10));
     gameOptions.setAlignment(Pos.BOTTOM_RIGHT);
 
   }
@@ -167,7 +167,7 @@ public class GamePlayGUI {
     main.switchToEndGameLayout();
   }
 
-  public BorderPane getGameLayout () {
+  public BorderPane getGameLayout() {
     return gameLayout;
   }
 }
