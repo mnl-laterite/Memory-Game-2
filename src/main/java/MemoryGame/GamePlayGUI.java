@@ -107,6 +107,9 @@ public class GamePlayGUI {
         if (!gameLogic.pieceTurned(i, j)) {
           gameLogic.turnPiece(i, j);
           piecesTurned++;
+        } else {
+          gameLogic.hideUnfoundPairs();
+          piecesTurned = 0;
         }
       }
 
