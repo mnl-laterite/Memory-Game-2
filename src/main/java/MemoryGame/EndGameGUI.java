@@ -76,7 +76,7 @@ public class EndGameGUI {
   private void difficultyButtonPressed() {
     playAgainButton.setVisible(true);
     endGameSettingsPanel.setVisible(false);
-    main.setScene(main.getGameScene());
+    main.switchToGameLayout();
   }
 
   private void easyButtonPressed () {

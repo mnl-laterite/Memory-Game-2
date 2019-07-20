@@ -156,7 +156,7 @@ public class GamePlayGUI {
 
   private void resetButtonPressed() {
     gameLogic.resetGame(Difficulty.DEFAULT);
-    main.setScene(main.getMainScene());
+    main.switchToMenuLayout();
   }
 
   private void quitButtonPressed() {
@@ -164,7 +164,7 @@ public class GamePlayGUI {
   }
 
   private void setEndGameGUI() {
-    main.setScene(main.getEndScene());
+    main.switchToEndGameLayout();
   }
 
   public BorderPane getGameLayout () {

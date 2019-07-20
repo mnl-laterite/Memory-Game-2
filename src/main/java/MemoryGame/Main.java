@@ -3,7 +3,10 @@ package MemoryGame;
 import MemoryGame.game.Difficulty;
 import MemoryGame.game.GameLogic;
 import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -13,9 +16,12 @@ public class Main extends Application {
   private MainMenuGUI mainMenuGUI;
   private GamePlayGUI gamePlayGUI;
   private EndGameGUI endGameGUI;
-  private Scene mainScene;
-  private Scene gameScene;
-  private Scene endScene;
+
+  private Scene scene;
+
+  private VBox menuLayout;
+  private BorderPane gameLayout;
+  private VBox endGameLayout;
 
   @Override
   public void start(Stage primaryStage) throws Exception {
@@ -29,33 +35,30 @@ public class Main extends Application {
     gamePlayGUI = new GamePlayGUI(this, gameLogic);
     endGameGUI = new EndGameGUI(this, gameLogic);
 
-    mainScene = new Scene(mainMenuGUI.getMenuLayout(), 480, 800);
-    mainScene.getStylesheets().add(this.getClass().getResource("/mainMenuStyle.css").toExternalForm());
+    menuLayout = mainMenuGUI.getMenuLayout();
+    gameLayout = gamePlayGUI.getGameLayout();
+    endGameLayout = endGameGUI.getEndGameLayout();
 
-    gameScene = new Scene(gamePlayGUI.getGameLayout(), 800, 900);
-    gameScene.getStylesheets().add(this.getClass().getResource("/gamePlayStyle.css").toExternalForm());
+    menuLayout.getStylesheets().add(this.getClass().getResource("/mainMenuStyle.css").toExternalForm());
+    gameLayout.getStylesheets().add(this.getClass().getResource("/gamePlayStyle.css").toExternalForm());
+    endGameLayout.getStylesheets().add(this.getClass().getResource("/endGameStyle.css").toExternalForm());
 
-    endScene = new Scene(endGameGUI.getEndGameLayout(), 480, 800);
-    endScene.getStylesheets().add(this.getClass().getResource("/endGameStyle.css").toExternalForm());
+    scene = new Scene(menuLayout, 600, 800);
 
-    primaryStage.setScene(mainScene);
+    primaryStage.setScene(scene);
     primaryStage.show();
   }
 
-  public void setScene(Scene scene) {
-    this.primaryStage.setScene(scene);
+  public void switchToMenuLayout () {
+    scene.setRoot(menuLayout);
   }
 
-  public Scene getMainScene() {
-    return mainScene;
+  public void switchToGameLayout () {
+    scene.setRoot(gameLayout);
   }
 
-  public Scene getGameScene() {
-    return gameScene;
-  }
-
-  public Scene getEndScene() {
-    return endScene;
+  public void switchToEndGameLayout () {
+    scene.setRoot(endGameLayout);
   }
 
   public static void main(String[] args) {
