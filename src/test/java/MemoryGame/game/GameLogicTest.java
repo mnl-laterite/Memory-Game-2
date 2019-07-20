@@ -2,8 +2,6 @@ package MemoryGame.game;
 
 import org.junit.Test;
 
-import java.util.Random;
-
 import static org.junit.Assert.assertEquals;
 
 public class GameLogicTest {
