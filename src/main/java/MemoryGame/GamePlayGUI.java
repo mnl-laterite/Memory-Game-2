@@ -98,10 +98,9 @@ class GamePlayGUI {
     Timeline gameTimeline = new Timeline();
     gameTimeline.setCycleCount(Timeline.INDEFINITE);
 
-    //Keyframe that draws the game pieces based on the current state of the game after every 17 milliseconds.
-    KeyFrame kf = new KeyFrame(Duration.seconds(0.017), event -> updateDisplay());
+    KeyFrame kf = new KeyFrame(Duration.seconds(0.034), event -> updateDisplay());
     gameTimeline.getKeyFrames().add(kf);
-    gameTimeline.play(); //starting the animation loop.
+    gameTimeline.play();
   }
 
   /**
