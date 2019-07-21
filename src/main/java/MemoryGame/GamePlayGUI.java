@@ -88,7 +88,7 @@ class GamePlayGUI {
 
     //getting the 12 unique topside sprites for the pieces
     for (int i = 1; i <= 12; ++i) {
-      gamePieces[i] = new Image(this.getClass().getResource("/gamepieces/" + i + ".webp").toExternalForm());
+      gamePieces[i] = new Image(this.getClass().getResource("/gamepieces/" + i + ".png").toExternalForm());
     }
 
     graphicsContext = gameCanvas.getGraphicsContext2D();
