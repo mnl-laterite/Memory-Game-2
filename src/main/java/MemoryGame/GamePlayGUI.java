@@ -103,41 +103,43 @@ class GamePlayGUI {
     animationLoop.setCycleCount(Timeline.INDEFINITE);
 
     //Keyframe that draws the game pieces based on the current state of the game.
-    KeyFrame kf = new KeyFrame(
-      Duration.seconds(0.017),
-      event -> {
-
-          int drawLimit = gameLogic.getGamePlayMapDepth();
-          double boxSizeX = gameCanvas.getWidth() / drawLimit;
-          double boxSizeY = gameCanvas.getHeight() / drawLimit;
-
-          graphicsContext.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
-
-          for (int i = 0; i < drawLimit; ++i) {
-            for (int j = 0; j < drawLimit; ++j) {
-
-              if (gameLogic.pieceTurned(i, j)) {
-
-                graphicsContext.drawImage(gamePieces[gameLogic.getMapContents(i, j)],
-                                          i * boxSizeX + 10,
-                                          j * boxSizeY + 10,
-                                          boxSizeX - 10,
-                                          boxSizeY - 10);
-              }
-              else if (!gameLogic.pieceTurned(i, j) && !gameLogic.pieceEliminated(i, j)) {
-
-                graphicsContext.drawImage(gamePieces[0],
-                                          i * boxSizeX + 10,
-                                          j * boxSizeY + 10,
-                                          boxSizeX - 10,
-                                          boxSizeY - 10);
-              }
-            }
-          }
-      }
-    );
+    KeyFrame kf = new KeyFrame(Duration.seconds(0.017), event -> drawPieces());
     animationLoop.getKeyFrames().add(kf);
     animationLoop.play(); //starting the animation loop.
+  }
+
+  /**
+   * Draws the game pieces on the canvas using the graphics context according to current game state.
+   */
+  private void drawPieces () {
+
+    int drawLimit = gameLogic.getGamePlayMapDepth();
+    double boxSizeX = gameCanvas.getWidth() / drawLimit;
+    double boxSizeY = gameCanvas.getHeight() / drawLimit;
+
+    graphicsContext.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+
+    for (int i = 0; i < drawLimit; ++i) {
+      for (int j = 0; j < drawLimit; ++j) {
+
+        if (gameLogic.pieceTurned(i, j)) {
+
+          graphicsContext.drawImage(gamePieces[gameLogic.getMapContents(i, j)],
+            i * boxSizeX + 10,
+            j * boxSizeY + 10,
+            boxSizeX - 10,
+            boxSizeY - 10);
+        }
+        else if (!gameLogic.pieceTurned(i, j) && !gameLogic.pieceEliminated(i, j)) {
+
+          graphicsContext.drawImage(gamePieces[0],
+            i * boxSizeX + 10,
+            j * boxSizeY + 10,
+            boxSizeX - 10,
+            boxSizeY - 10);
+        }
+      }
+    }
   }
 
   /**
