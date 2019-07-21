@@ -105,7 +105,7 @@ public class GameLogic {
 
     if (rowIndex <= getGamePlayMapDepth() && colIndex <= getGamePlayMapDepth()) {
 
-      if (pieceStillInGame(rowIndex, colIndex)) {
+      if (pieceStillInGame(rowIndex, colIndex) && !isMarkedForElimination(rowIndex, colIndex)) {
         if (!pieceTurned(rowIndex, colIndex)) {
 
           turnPiece(rowIndex, colIndex);
