@@ -9,6 +9,7 @@ import javafx.scene.layout.*;
 
 /**
  * Describes the main menu screen.
+ *
  * @author mnl-laterite
  */
 class MainMenuGUI {
@@ -40,10 +41,11 @@ class MainMenuGUI {
 
   /**
    * Creates the main screen of the game.
-   * @param main instance of the main class, needed to change game screens.
+   *
+   * @param main      instance of the main class, needed to change game screens.
    * @param gameLogic instance of the game board, needed to draw the pieces according to game state.
    */
-  MainMenuGUI(Main main, GameLogic gameLogic) {
+  MainMenuGUI (Main main, GameLogic gameLogic) {
 
     this.main = main;
     this.gameLogic = gameLogic;
@@ -68,7 +70,7 @@ class MainMenuGUI {
   /**
    * Creates the difficulty settings panel.
    */
-  private void createDifficultySettingsPanel() {
+  private void createDifficultySettingsPanel () {
 
     difficultySettingsPanel = new HBox();
     difficultySettingsPanel.setSpacing(10);
@@ -130,14 +132,14 @@ class MainMenuGUI {
   /**
    * Starts the game by changing the main menu screen to the game screen.
    */
-  private void startGame() {
+  private void startGame () {
     main.switchToGameLayout();
   }
 
   /**
    * @return the parents node containing the main menu layout.
    */
-  VBox getMenuLayout() {
+  VBox getMenuLayout () {
     return menuLayout;
   }
 

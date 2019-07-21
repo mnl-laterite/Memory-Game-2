@@ -4,6 +4,7 @@ package MemoryGame.game;
  * Defines the possible difficulties of the game and the relevant parameter value changes attached to each difficulty:
  * the total number of pairs to be found in a game with that respective difficulty level, and the iterator limit or map
  * depth used when arranging the pieces on the game board.
+ *
  * @author mnl-laterite
  */
 public enum Difficulty {

@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * Describes the end game screen.
+ *
  * @author mnl-laterite
  */
 class EndGameGUI {
@@ -41,7 +42,8 @@ class EndGameGUI {
 
   /**
    * Creates the end game screen of the game.
-   * @param main instance of the main app class.
+   *
+   * @param main      instance of the main app class.
    * @param gameLogic instance of the underlying game board.
    */
   EndGameGUI (Main main, GameLogic gameLogic) {
@@ -60,14 +62,14 @@ class EndGameGUI {
     quitButton.setOnAction(e -> quitButtonPressed());
 
     endGameLayout.setAlignment(Pos.CENTER);
-    endGameLayout.getChildren().addAll(playAgainButton, difficultySettingPanel,quitButton);
+    endGameLayout.getChildren().addAll(playAgainButton, difficultySettingPanel, quitButton);
     endGameLayout.setId("endgamelayout");
   }
 
   /**
    * Creates the difficulty settings panel.
    */
-  private void createDifficultySettingsPanel() {
+  private void createDifficultySettingsPanel () {
 
     difficultySettingPanel = new HBox();
     difficultySettingPanel.setSpacing(10);

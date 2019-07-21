@@ -17,6 +17,7 @@ import javafx.util.Duration;
 
 /**
  * Describes the gameplay screen.
+ *
  * @author mnl-laterite
  */
 class GamePlayGUI {
@@ -68,10 +69,11 @@ class GamePlayGUI {
 
   /**
    * Creates the gameplay screen and starts the game loop.
-   * @param main instance of the main app class, needed to change game screens.
+   *
+   * @param main      instance of the main app class, needed to change game screens.
    * @param gameLogic instance of the game board that saves the current game state.
    */
-  GamePlayGUI(Main main, GameLogic gameLogic) {
+  GamePlayGUI (Main main, GameLogic gameLogic) {
 
     this.main = main;
     this.gameLogic = gameLogic;
@@ -99,13 +101,13 @@ class GamePlayGUI {
     piecesTurned = 0;
     gameCanvas.setOnMouseClicked(this::onMouseClicked);
 
-    Timeline animationLoop = new Timeline();
-    animationLoop.setCycleCount(Timeline.INDEFINITE);
+    Timeline gameTimeline = new Timeline();
+    gameTimeline.setCycleCount(Timeline.INDEFINITE);
 
     //Keyframe that draws the game pieces based on the current state of the game after every 17 milliseconds.
     KeyFrame kf = new KeyFrame(Duration.seconds(0.017), event -> drawPieces());
-    animationLoop.getKeyFrames().add(kf);
-    animationLoop.play(); //starting the animation loop.
+    gameTimeline.getKeyFrames().add(kf);
+    gameTimeline.play(); //starting the animation loop.
   }
 
   /**
@@ -129,8 +131,7 @@ class GamePlayGUI {
             j * boxSizeY + 10,
             boxSizeX - 10,
             boxSizeY - 10);
-        }
-        else if (!gameLogic.pieceTurned(i, j) && !gameLogic.pieceEliminated(i, j)) {
+        } else if (!gameLogic.pieceTurned(i, j) && gameLogic.pieceStillInGame(i, j)) {
 
           graphicsContext.drawImage(gamePieces[0],
             i * boxSizeX + 10,
@@ -144,9 +145,10 @@ class GamePlayGUI {
 
   /**
    * Defines what user input is legal on the canvas.
+   *
    * @param event mouse click on the canvas.
    */
-  private void onMouseClicked(MouseEvent event) {
+  private void onMouseClicked (MouseEvent event) {
 
     int drawLimit = gameLogic.getGamePlayMapDepth();
     double boxSizeX = gameCanvas.getWidth() / drawLimit;
@@ -155,35 +157,7 @@ class GamePlayGUI {
     int i = (int) event.getX() / (int) boxSizeX;
     int j = (int) event.getY() / (int) boxSizeY;
 
-    if (i <= gameLogic.getGamePlayMapDepth() && j <= gameLogic.getGamePlayMapDepth()) {
-
-      if (!gameLogic.pieceEliminated(i, j)) {
-        if (!gameLogic.pieceTurned(i, j)) {
-
-          gameLogic.turnPiece(i, j);
-          piecesTurned++;
-
-        } else {
-
-          gameLogic.hideUnfoundPairs();
-          piecesTurned = 0;
-        }
-      }
-
-      if (piecesTurned == 2) {
-        if (gameLogic.pairFound()) {
-          gameLogic.eliminateFoundPairs();
-          piecesTurned = 0;
-        }
-      }
-
-      if (piecesTurned > 2) {
-
-        piecesTurned = 1;
-        gameLogic.hideUnfoundPairs();
-        gameLogic.turnPiece(i, j);
-      }
-    }
+    gameLogic.playCoordinates(i, j);
 
     if (gameLogic.getPairsTotal() - gameLogic.getPairsFound() == 0) {
       setEndGameGUI();
@@ -193,7 +167,7 @@ class GamePlayGUI {
   /**
    * Creates the game canvas and sets it in its container pane.
    */
-  private void createGameCanvas() {
+  private void createGameCanvas () {
 
     gameCanvas = new ResizableCanvas(canvasContainer.widthProperty(), canvasContainer.heightProperty());
     canvasContainer.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
@@ -203,7 +177,7 @@ class GamePlayGUI {
   /**
    * Creates the panel that contains the game reset and quit buttons.
    */
-  private void createGameOptions() {
+  private void createGameOptions () {
 
     optionsButtons = new HBox();
 
@@ -223,7 +197,7 @@ class GamePlayGUI {
   /**
    * Resets the game and sets the current screen to the main menu screen.
    */
-  private void resetGame() {
+  private void resetGame () {
     gameLogic.resetGame(Difficulty.DEFAULT);
     main.switchToMenuLayout();
   }
@@ -231,21 +205,21 @@ class GamePlayGUI {
   /**
    * Exits the application.
    */
-  private void quitButtonPressed() {
+  private void quitButtonPressed () {
     Platform.exit();
   }
 
   /**
    * Sets the current screen to the end game screen.
    */
-  private void setEndGameGUI() {
+  private void setEndGameGUI () {
     main.switchToEndGameLayout();
   }
 
   /**
    * @return the parent node for the game play screen layout.
    */
-  BorderPane getGameLayout() {
+  BorderPane getGameLayout () {
     return gameLayout;
   }
 }

@@ -1,10 +1,12 @@
 package MemoryGame.game;
 
 import javafx.geometry.Dimension2D;
+
 import java.util.Random;
 
 /**
  * Constructs the underlying game board.
+ *
  * @author mnl-laterite
  */
 public class GameLogic {
@@ -35,10 +37,16 @@ public class GameLogic {
   private int pairsTotal;
 
   /**
+   * Counter for the number of pieces turned in a round (cannot be more than 2).
+   */
+  private int piecesTurned;
+
+  /**
    * Constructs the game board at its maximum potentially needed size.
+   *
    * @param difficulty the difficulty level of the game.
    */
-  public GameLogic(Difficulty difficulty) {
+  public GameLogic (Difficulty difficulty) {
 
     gamePlayMap = new int[5][5];
     resetGame(difficulty);
@@ -48,42 +56,81 @@ public class GameLogic {
   /**
    * Limits the game board size based on game difficulty level, resets number of found pairs to 0, and places the game
    * pieces randomly on the game board, bottom-side up (i.e. unique piece sprite not visible to user).
+   *
    * @param difficulty the difficulty level of the game.
    */
-  public void resetGame(Difficulty difficulty) {
+  public void resetGame (Difficulty difficulty) {
 
     pairsFound = 0;
+    piecesTurned = 0;
     setDifficultyParameters(difficulty);
     shuffleGamePieces();
+  }
+
+  public void playCoordinates (int rowIndex, int colIndex) {
+
+    if (rowIndex <= getGamePlayMapDepth() && colIndex <= getGamePlayMapDepth()) {
+
+      if (pieceStillInGame(rowIndex, colIndex)) {
+        if (!pieceTurned(rowIndex, colIndex)) {
+
+          turnPiece(rowIndex, colIndex);
+          piecesTurned++;
+
+        } else {
+
+          hideUnfoundPairs();
+          piecesTurned = 0;
+        }
+      }
+
+      if (piecesTurned == 2) {
+        if (pairFound()) {
+          eliminateFoundPairs();
+          piecesTurned = 0;
+        }
+      }
+
+      if (piecesTurned > 2) {
+
+        piecesTurned = 1;
+        hideUnfoundPairs();
+        turnPiece(rowIndex, colIndex);
+      }
+    }
+
   }
 
   /**
    * Checks if the piece placed at given coordinates is turned bottom-side down (i.e. unique piece sprite visible
    * to the user).
+   *
    * @param rowIndex row index in the game board matrix.
    * @param colIndex column index in the game board matrix.
    * @return true if the piece is turned bottom-side down.
    */
-  public boolean pieceTurned(int rowIndex, int colIndex) {
+  public boolean pieceTurned (int rowIndex, int colIndex) {
     return gamePlayMap[rowIndex][colIndex] > 0;
   }
 
   /**
    * Checks if there is a piece placed at given coordinates in the game board matrix.
+   *
    * @param rowIndex row index in the game board matrix.
    * @param colIndex column index in the game board matrix.
    * @return true if there is no piece at given coordinates.
    */
-  public boolean pieceEliminated (int rowIndex, int colIndex) {
-    return gamePlayMap[rowIndex][colIndex] == 0;
+  public boolean pieceStillInGame (int rowIndex, int colIndex) {
+    return gamePlayMap[rowIndex][colIndex] != 0;
   }
 
   /**
    * Flips the piece on the game board found at given matrix coordinates.
+   *
    * @param rowIndex row index in the game board matrix.
    * @param colIndex column index in the game board matrix.
    */
-  public void turnPiece(int rowIndex, int colIndex) {
+  void turnPiece (int rowIndex, int colIndex) {
     gamePlayMap[rowIndex][colIndex] *= -1;
   }
 
@@ -91,7 +138,7 @@ public class GameLogic {
    * Hides all pieces that are turned bottom-side down, under the assumption that they do not match (aren't pairs).
    * No check for pair match is performed.
    */
-  public void hideUnfoundPairs () {
+  void hideUnfoundPairs () {
 
     for (int i = 0; i < gamePlayMapDepth; ++i) {
       for (int j = 0; j < gamePlayMapDepth; ++j) {
@@ -105,14 +152,14 @@ public class GameLogic {
   /**
    * Eliminates the piece found at given matrix coordinates from the game board.
    */
-  private void eliminatePiece(int rowIndex, int colIndex) {
+  private void eliminatePiece (int rowIndex, int colIndex) {
     gamePlayMap[rowIndex][colIndex] = 0;
   }
 
   /**
    * Eliminates all turned pieces under the assumption that they are a matching pair.
    */
-  public void eliminateFoundPairs () {
+  private void eliminateFoundPairs () {
 
     for (int i = 0; i < gamePlayMapDepth; ++i) {
       for (int j = 0; j < gamePlayMapDepth; ++j) {
@@ -126,9 +173,10 @@ public class GameLogic {
 
   /**
    * Checks for matching pieces and eliminates them from the game board.
+   *
    * @return true if a pair was found and eliminated, i.e. if the user has turned two matching pieces bottom-side down.
    */
-  public boolean pairFound() {
+  boolean pairFound () {
 
     /*
      * The number of points/coordinate pairs searched on the game board. Cannot exceed the total number of pieces
@@ -171,52 +219,52 @@ public class GameLogic {
     }
 
     if (turnedPieceOne.getWidth() == turnedPieceTwo.getWidth() &&
-        turnedPieceOne.getHeight() == turnedPieceTwo.getHeight())
+      turnedPieceOne.getHeight() == turnedPieceTwo.getHeight())
       return false; // only one piece was turned.
 
-    if (gamePlayMap[(int)turnedPieceOne.getWidth()][(int)turnedPieceOne.getHeight()] ==
-        gamePlayMap[(int)turnedPieceTwo.getWidth()][(int)turnedPieceTwo.getHeight()]) {
+    if (gamePlayMap[(int) turnedPieceOne.getWidth()][(int) turnedPieceOne.getHeight()] ==
+      gamePlayMap[(int) turnedPieceTwo.getWidth()][(int) turnedPieceTwo.getHeight()]) {
 
       return true; // a pair has been found: the two found pieces match.
-    }
-      else return false; // the two found pieces don't match.
+    } else return false; // the two found pieces don't match.
   }
 
   /**
    * @return the number of pairs found so far.
    */
-  public int getPairsFound() {
+  public int getPairsFound () {
     return pairsFound;
   }
 
   /**
    * @return the total number of pairs on the game board (which depends on difficulty level).
    */
-  public int getPairsTotal() {
+  public int getPairsTotal () {
     return pairsTotal;
   }
 
   /**
    * @return the index search limit (which depends on difficulty level).
    */
-  public int getGamePlayMapDepth() {
+  public int getGamePlayMapDepth () {
     return gamePlayMapDepth;
   }
 
   /**
    * Extracts the piece #ID found at given coordinates.
+   *
    * @param rowIndex row index in the game board matrix.
    * @param colIndex column index in the game board matrix.
    * @return the piece #ID found.
    */
-  public int getMapContents(int rowIndex, int colIndex) {
+  public int getMapContents (int rowIndex, int colIndex) {
     return gamePlayMap[rowIndex][colIndex];
   }
 
   /**
    * Sets the parameters of the game that depend on difficulty level.
    */
-  private void setDifficultyParameters(Difficulty difficulty) {
+  private void setDifficultyParameters (Difficulty difficulty) {
     pairsTotal = difficulty.pairsTotal;
     gamePlayMapDepth = difficulty.gamePlayMapDepth;
   }
@@ -232,7 +280,7 @@ public class GameLogic {
     int[] shuffler = new int[pairsTotal * 2];
 
     for (i = 0; i < pairsTotal * 2; ++i) {
-      shuffler[i] = i < pairsTotal ? -i - 1 :  -i - 1 + pairsTotal;
+      shuffler[i] = i < pairsTotal ? -i - 1 : -i - 1 + pairsTotal;
     }
 
     for (i = pairsTotal * 2 - 1; i > 0; --i) {
@@ -247,7 +295,7 @@ public class GameLogic {
     temp = 0;
     for (i = 0; i < gamePlayMapDepth; ++i) {
       for (j = 0; j < gamePlayMapDepth; ++j) {
-        gamePlayMap[i][j] = temp < 2*pairsTotal ? shuffler[temp] : 0;
+        gamePlayMap[i][j] = temp < 2 * pairsTotal ? shuffler[temp] : 0;
         ++temp;
       }
     }

@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 /**
  * A memory game app.
+ *
  * @author mnl-laterite
  */
 public class Main extends Application {
@@ -32,7 +33,7 @@ public class Main extends Application {
   private VBox endGameLayout;
 
   @Override
-  public void start(Stage primaryStage) {
+  public void start (Stage primaryStage) {
 
     primaryStage.setTitle("Memory Training Game!");
 
@@ -69,7 +70,7 @@ public class Main extends Application {
     scene.setRoot(endGameLayout);
   }
 
-  public static void main(String[] args) {
+  public static void main (String[] args) {
     launch(args);
   }
 }

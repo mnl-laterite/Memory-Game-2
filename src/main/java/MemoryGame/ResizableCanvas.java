@@ -10,10 +10,11 @@ public class ResizableCanvas extends Canvas {
 
   /**
    * Creates a resizable canvas which will change its size to always fit in a given container node.
-   * @param width the container node width.
+   *
+   * @param width  the container node width.
    * @param height the container node height.
    */
-  ResizableCanvas(ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
+  ResizableCanvas (ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
     super();
 
     this.setWidth(width.get());
@@ -27,7 +28,7 @@ public class ResizableCanvas extends Canvas {
    * @inheritDoc
    */
   @Override
-  public boolean isResizable() {
+  public boolean isResizable () {
     return true;
   }
 }
