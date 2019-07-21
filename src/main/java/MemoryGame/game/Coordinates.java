@@ -2,6 +2,8 @@ package MemoryGame.game;
 
 /**
  * Describes 2D coordinates for the game map.
+ *
+ * @author mnl-laterite
  */
 class Coordinates {
 
