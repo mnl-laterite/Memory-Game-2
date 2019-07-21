@@ -2,6 +2,7 @@ package MemoryGame.game;
 
 import javafx.geometry.Dimension2D;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -242,55 +243,26 @@ public class GameLogic {
    */
   boolean pairFound () {
 
-    /*
-     * The number of points/coordinate pairs searched on the game board. Cannot exceed the total number of pieces
-     * on the game board.
-     */
-    int pointsSearched = 0;
-    int i, j;
+    ArrayList<Coordinates> turnedPieces = new ArrayList<>();
 
-    Dimension2D turnedPieceOne = null;
-    Dimension2D turnedPieceTwo = null;
-
-    boolean searching = true;
-
-    // Looks for the first piece turned.
-    for (i = 0; i < gamePlayMapDepth && searching; ++i) {
-      for (j = 0; j < gamePlayMapDepth; ++j) {
+    for (int i = 0; i < gamePlayMapDepth; ++i) {
+      for (int j = 0; j < gamePlayMapDepth; ++j) {
         if (pieceTurned(i, j)) {
-          turnedPieceOne = new Dimension2D(i, j);
-          searching = false;
-          break;
-        }
-        pointsSearched++;
-      }
-    }
-
-    if (pointsSearched == pairsTotal * 2)
-      return false; // all pieces were searched through and none were found bottom-side down.
-
-    searching = true;
-
-    // Looks for the second piece turned.
-    for (i = gamePlayMapDepth - 1; i >= 0 && searching; --i) {
-      for (j = gamePlayMapDepth - 1; j >= 0; --j) {
-        if (pieceTurned(i, j)) {
-          turnedPieceTwo = new Dimension2D(i, j);
-          searching = false;
-          break;
+          turnedPieces.add(new Coordinates(i, j));
         }
       }
     }
 
-    if (turnedPieceOne.getWidth() == turnedPieceTwo.getWidth() &&
-      turnedPieceOne.getHeight() == turnedPieceTwo.getHeight())
-      return false; // only one piece was turned.
+    if (turnedPieces.size() == 2) {
 
-    if (gamePlayMap[(int) turnedPieceOne.getWidth()][(int) turnedPieceOne.getHeight()] ==
-      gamePlayMap[(int) turnedPieceTwo.getWidth()][(int) turnedPieceTwo.getHeight()]) {
+      final Coordinates pieceOne = turnedPieces.get(0);
+      final Coordinates pieceTwo = turnedPieces.get(1);
 
-      return true; // a pair has been found: the two found pieces match.
-    } else return false; // the two found pieces don't match.
+      return gamePlayMap[pieceOne.getRowIndex()][pieceOne.getColIndex()] ==
+        gamePlayMap[pieceTwo.getRowIndex()][pieceTwo.getColIndex()];
+    } else {
+      return false;
+    }
   }
 
   /**
