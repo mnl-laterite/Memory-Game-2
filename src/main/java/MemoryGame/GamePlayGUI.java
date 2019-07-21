@@ -53,11 +53,6 @@ class GamePlayGUI {
   private GraphicsContext graphicsContext;
 
   /**
-   * The number of pieces turned so far, used as a counter to not allow more than 2 in one turn.
-   */
-  private int piecesTurned;
-
-  /**
    * The parent node for the gameplay screen layout.
    */
   private BorderPane gameLayout;
@@ -98,23 +93,33 @@ class GamePlayGUI {
 
     graphicsContext = gameCanvas.getGraphicsContext2D();
 
-    piecesTurned = 0;
     gameCanvas.setOnMouseClicked(this::onMouseClicked);
 
     Timeline gameTimeline = new Timeline();
     gameTimeline.setCycleCount(Timeline.INDEFINITE);
 
     //Keyframe that draws the game pieces based on the current state of the game after every 17 milliseconds.
-    KeyFrame kf = new KeyFrame(Duration.seconds(0.017), event -> drawPieces());
+    KeyFrame kf = new KeyFrame(Duration.seconds(0.017), event -> updateDisplay());
     gameTimeline.getKeyFrames().add(kf);
     gameTimeline.play(); //starting the animation loop.
+  }
+
+  /**
+   * Updates the game state and draws the pieces on the game board.
+   */
+  private void updateDisplay () {
+    gameLogic.updateState();
+    drawPieces();
+
+    if (gameLogic.getPairsTotal() - gameLogic.getPairsFound() == 0) {
+      setEndGameGUI();
+    }
   }
 
   /**
    * Draws the game pieces on the canvas using the graphics context according to current game state.
    */
   private void drawPieces () {
-
     int drawLimit = gameLogic.getGamePlayMapDepth();
     double boxSizeX = gameCanvas.getWidth() / drawLimit;
     double boxSizeY = gameCanvas.getHeight() / drawLimit;
@@ -124,15 +129,22 @@ class GamePlayGUI {
     for (int i = 0; i < drawLimit; ++i) {
       for (int j = 0; j < drawLimit; ++j) {
 
-        if (gameLogic.pieceTurned(i, j)) {
+        if (gameLogic.pieceTurned(i, j) && gameLogic.isMarkedForElimination(i, j)) {
 
+          graphicsContext.drawImage(gamePieces[gameLogic.getMarkedForEliminationMapContents(i,j)],
+            i * boxSizeX + 10,
+            j * boxSizeY + 10,
+            boxSizeX - 10,
+            boxSizeY - 10);
+
+        } else if (gameLogic.pieceTurned(i, j) && !gameLogic.isMarkedForElimination(i,j)) {
           graphicsContext.drawImage(gamePieces[gameLogic.getMapContents(i, j)],
             i * boxSizeX + 10,
             j * boxSizeY + 10,
             boxSizeX - 10,
             boxSizeY - 10);
-        } else if (!gameLogic.pieceTurned(i, j) && gameLogic.pieceStillInGame(i, j)) {
 
+        } else if (!gameLogic.pieceTurned(i, j) && gameLogic.pieceStillInGame(i, j)) {
           graphicsContext.drawImage(gamePieces[0],
             i * boxSizeX + 10,
             j * boxSizeY + 10,
@@ -158,10 +170,6 @@ class GamePlayGUI {
     int j = (int) event.getY() / (int) boxSizeY;
 
     gameLogic.playCoordinates(i, j);
-
-    if (gameLogic.getPairsTotal() - gameLogic.getPairsFound() == 0) {
-      setEndGameGUI();
-    }
   }
 
   /**

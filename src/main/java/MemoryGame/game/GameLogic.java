@@ -16,6 +16,7 @@ public class GameLogic {
    * <pre>
    * 0: no piece or piece eliminated.
    * 1 to 12: piece with given #ID turned bottom-side down (i.e. unique top-side piece sprite visible to user).
+   * 13 to 24: piece with x - 12 #ID is marked for elimination.
    * -12 to -1: piece with given #ID turned bottom-side up (i.e. unique top-side piece sprite not visible to user).
    * </pre>
    */
@@ -40,6 +41,16 @@ public class GameLogic {
    * Counter for the number of pieces turned in a round (cannot be more than 2).
    */
   private int piecesTurned;
+
+  /**
+   * Saves the time when a found pair is marked for elimination.
+   */
+  private long pairMarkedTime = -1;
+
+  /**
+   * Saves the time when the user has flipped two pieces over.
+   */
+  private long piecesFlippedTime = -1;
 
   /**
    * Constructs the game board at its maximum potentially needed size.
@@ -67,6 +78,29 @@ public class GameLogic {
     shuffleGamePieces();
   }
 
+  /**
+   * Updates the state of the game after a required time.
+   */
+  public void updateState () {
+
+    if (pairMarkedTime != -1 && System.currentTimeMillis() - pairMarkedTime > 700) {
+      eliminateMarkedPairs();
+      pairMarkedTime = -1;
+    }
+
+    if (piecesTurned == 2 && piecesFlippedTime != -1 && System.currentTimeMillis() - piecesFlippedTime > 2100) {
+      hideUnfoundPairs();
+      piecesFlippedTime = -1;
+    }
+
+  }
+
+  /**
+   * Modifies the state of the game board according to user input.
+   *
+   * @param rowIndex the row index in the game board matrix.
+   * @param colIndex the column index in the game board matrix.
+   */
   public void playCoordinates (int rowIndex, int colIndex) {
 
     if (rowIndex <= getGamePlayMapDepth() && colIndex <= getGamePlayMapDepth()) {
@@ -86,8 +120,11 @@ public class GameLogic {
 
       if (piecesTurned == 2) {
         if (pairFound()) {
-          eliminateFoundPairs();
+          markPairForElimination();
+          pairMarkedTime = System.currentTimeMillis();
           piecesTurned = 0;
+        } else {
+          piecesFlippedTime = System.currentTimeMillis();
         }
       }
 
@@ -102,7 +139,7 @@ public class GameLogic {
   }
 
   /**
-   * Checks if the piece placed at given coordinates is turned bottom-side down (i.e. unique piece sprite visible
+   * Checks if the piece at given coordinates is turned bottom-side down (i.e. unique piece sprite visible
    * to the user).
    *
    * @param rowIndex row index in the game board matrix.
@@ -111,6 +148,17 @@ public class GameLogic {
    */
   public boolean pieceTurned (int rowIndex, int colIndex) {
     return gamePlayMap[rowIndex][colIndex] > 0;
+  }
+
+  /**
+   * Checks if the piece at given coordinates is marked for elimination.
+   *
+   * @param rowIndex row index in the game board matrix.
+   * @param colIndex column index in the game board matrix.
+   * @return true if the piece is marked for elimination.
+   */
+  public boolean isMarkedForElimination (int rowIndex, int colIndex) {
+    return gamePlayMap[rowIndex][colIndex] > 12;
   }
 
   /**
@@ -150,25 +198,41 @@ public class GameLogic {
   }
 
   /**
-   * Eliminates the piece found at given matrix coordinates from the game board.
+   * Marks a pair to be later eliminated from the game board.
    */
-  private void eliminatePiece (int rowIndex, int colIndex) {
-    gamePlayMap[rowIndex][colIndex] = 0;
-  }
-
-  /**
-   * Eliminates all turned pieces under the assumption that they are a matching pair.
-   */
-  private void eliminateFoundPairs () {
+  private void markPairForElimination () {
 
     for (int i = 0; i < gamePlayMapDepth; ++i) {
       for (int j = 0; j < gamePlayMapDepth; ++j) {
         if (pieceTurned(i, j)) {
+          gamePlayMap[i][j] += 12;
+        }
+      }
+    }
+  }
+
+  /**
+   * Eliminates marked pairs from the game.
+   */
+  private void eliminateMarkedPairs () {
+
+    for (int i = 0; i < gamePlayMapDepth; ++i) {
+      for (int j = 0; j < gamePlayMapDepth; ++j) {
+        if (isMarkedForElimination(i, j)) {
           eliminatePiece(i, j);
         }
       }
     }
-    pairsFound++;
+
+
+    ++pairsFound;
+  }
+
+  /**
+   * Eliminates the piece found at given matrix coordinates from the game board.
+   */
+  private void eliminatePiece (int rowIndex, int colIndex) {
+    gamePlayMap[rowIndex][colIndex] = 0;
   }
 
   /**
@@ -259,6 +323,17 @@ public class GameLogic {
    */
   public int getMapContents (int rowIndex, int colIndex) {
     return gamePlayMap[rowIndex][colIndex];
+  }
+
+  /**
+   * Extracts the piece #ID at given coordinates for a piece that is set to be eliminated.
+   *
+   * @param rowIndex row index in the game board matrix.
+   * @param colIndex column index in the game board matrix.
+   * @return the piece #ID needed.
+   */
+  public int getMarkedForEliminationMapContents (int rowIndex, int colIndex) {
+    return gamePlayMap[rowIndex][colIndex] - 12;
   }
 
   /**
