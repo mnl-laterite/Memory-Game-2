@@ -93,12 +93,13 @@ public class GameLogic {
    */
   public void hideUnfoundPairs () {
 
-    for (int i = 0; i < gamePlayMapDepth; ++i)
+    for (int i = 0; i < gamePlayMapDepth; ++i) {
       for (int j = 0; j < gamePlayMapDepth; ++j) {
-        if (pieceTurned(i,j)) {
+        if (pieceTurned(i, j)) {
           turnPiece(i, j);
         }
       }
+    }
   }
 
   /**
@@ -106,6 +107,21 @@ public class GameLogic {
    */
   private void eliminatePiece(int rowIndex, int colIndex) {
     gamePlayMap[rowIndex][colIndex] = 0;
+  }
+
+  /**
+   * Eliminates all turned pieces under the assumption that they are a matching pair.
+   */
+  public void eliminateFoundPairs () {
+
+    for (int i = 0; i < gamePlayMapDepth; ++i) {
+      for (int j = 0; j < gamePlayMapDepth; ++j) {
+        if (pieceTurned(i, j)) {
+          eliminatePiece(i, j);
+        }
+      }
+    }
+    pairsFound++;
   }
 
   /**
@@ -161,11 +177,7 @@ public class GameLogic {
     if (gamePlayMap[(int)turnedPieceOne.getWidth()][(int)turnedPieceOne.getHeight()] ==
         gamePlayMap[(int)turnedPieceTwo.getWidth()][(int)turnedPieceTwo.getHeight()]) {
 
-      eliminatePiece((int)turnedPieceOne.getWidth(),(int)turnedPieceOne.getHeight());
-      eliminatePiece((int)turnedPieceTwo.getWidth(),(int)turnedPieceTwo.getHeight());
-      pairsFound++;
-
-      return true; // the two found pieces match and have been eliminated from the board.
+      return true; // a pair has been found: the two found pieces match.
     }
       else return false; // the two found pieces don't match.
   }

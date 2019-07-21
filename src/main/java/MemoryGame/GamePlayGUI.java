@@ -170,11 +170,12 @@ class GamePlayGUI {
 
       if (piecesTurned == 2) {
         if (gameLogic.pairFound()) {
-
-          gameLogic.hideUnfoundPairs();
+          gameLogic.eliminateFoundPairs();
           piecesTurned = 0;
         }
-      } else if (piecesTurned > 2) {
+      }
+
+      if (piecesTurned > 2) {
 
         piecesTurned = 1;
         gameLogic.hideUnfoundPairs();
