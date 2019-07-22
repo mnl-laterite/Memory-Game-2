@@ -120,55 +120,120 @@ class GamePlayGUI {
    */
   private void drawPieces () {
     int drawLimit = gameLogic.getGamePlayMapDepth();
-    double boxSizeX = gameCanvas.getWidth() / drawLimit;
-    double boxSizeY = gameCanvas.getHeight() / drawLimit;
+    double canvasWidth = gameCanvas.getWidth();
+    double canvasHeight = gameCanvas.getHeight();
+    double boxSize, offset;
+
+    if (canvasWidth > canvasHeight) {
+
+      boxSize = canvasHeight / drawLimit;
+      offset = (canvasWidth - canvasHeight) / 2;
+    } else {
+
+      boxSize = canvasWidth / drawLimit;
+      offset = (canvasHeight - canvasWidth) / 2;
+    }
 
     graphicsContext.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 
-    for (int i = 0; i < drawLimit; ++i) {
-      for (int j = 0; j < drawLimit; ++j) {
+    if (canvasWidth > canvasHeight) {
+      for (int i = 0; i < drawLimit; ++i) {
+        for (int j = 0; j < drawLimit; ++j) {
 
-        if (gameLogic.pieceTurned(i, j) && gameLogic.isMarkedForElimination(i, j)) {
+          if (gameLogic.pieceTurned(i, j) && gameLogic.isMarkedForElimination(i, j)) {
 
-          graphicsContext.drawImage(gamePieces[gameLogic.getMarkedForEliminationMapContents(i,j)],
-            i * boxSizeX + 10,
-            j * boxSizeY + 10,
-            boxSizeX - 10,
-            boxSizeY - 10);
+            graphicsContext.drawImage(gamePieces[gameLogic.getMarkedForEliminationMapContents(i, j)],
+              i * boxSize + offset,
+              j * boxSize,
+              boxSize - 10,
+              boxSize - 10);
 
-        } else if (gameLogic.pieceTurned(i, j) && !gameLogic.isMarkedForElimination(i,j)) {
-          graphicsContext.drawImage(gamePieces[gameLogic.getMapContents(i, j)],
-            i * boxSizeX + 10,
-            j * boxSizeY + 10,
-            boxSizeX - 10,
-            boxSizeY - 10);
+          } else if (gameLogic.pieceTurned(i, j) && !gameLogic.isMarkedForElimination(i, j)) {
+            graphicsContext.drawImage(gamePieces[gameLogic.getMapContents(i, j)],
+              i * boxSize + offset,
+              j * boxSize,
+              boxSize - 10,
+              boxSize - 10);
 
-        } else if (!gameLogic.pieceTurned(i, j) && gameLogic.pieceStillInGame(i, j)) {
-          graphicsContext.drawImage(gamePieces[0],
-            i * boxSizeX + 10,
-            j * boxSizeY + 10,
-            boxSizeX - 10,
-            boxSizeY - 10);
+          } else if (!gameLogic.pieceTurned(i, j) && gameLogic.pieceStillInGame(i, j)) {
+            graphicsContext.drawImage(gamePieces[0],
+              i * boxSize + offset,
+              j * boxSize,
+              boxSize - 10,
+              boxSize - 10);
+          }
+        }
+      }
+    } else {
+      for (int i = 0; i < drawLimit; ++i) {
+        for (int j = 0; j < drawLimit; ++j) {
+
+          if (gameLogic.pieceTurned(i, j) && gameLogic.isMarkedForElimination(i, j)) {
+
+            graphicsContext.drawImage(gamePieces[gameLogic.getMarkedForEliminationMapContents(i, j)],
+              i * boxSize,
+              j * boxSize + offset,
+              boxSize - 10,
+              boxSize - 10);
+
+          } else if (gameLogic.pieceTurned(i, j) && !gameLogic.isMarkedForElimination(i, j)) {
+            graphicsContext.drawImage(gamePieces[gameLogic.getMapContents(i, j)],
+              i * boxSize,
+              j * boxSize + offset,
+              boxSize - 10,
+              boxSize - 10);
+
+          } else if (!gameLogic.pieceTurned(i, j) && gameLogic.pieceStillInGame(i, j)) {
+            graphicsContext.drawImage(gamePieces[0],
+              i * boxSize,
+              j * boxSize + offset,
+              boxSize - 10,
+              boxSize - 10);
+          }
         }
       }
     }
   }
 
   /**
-   * Defines what user input is legal on the canvas.
+   * Checks if the input is valid (i.e. on a piece) and then plays the coordinates clicked on the game board.
    *
    * @param event mouse click on the canvas.
    */
   private void onMouseClicked (MouseEvent event) {
 
     int drawLimit = gameLogic.getGamePlayMapDepth();
-    double boxSizeX = gameCanvas.getWidth() / drawLimit;
-    double boxSizeY = gameCanvas.getHeight() / drawLimit;
+    int i, j;
 
-    int i = (int) event.getX() / (int) boxSizeX;
-    int j = (int) event.getY() / (int) boxSizeY;
+    double canvasWidth = gameCanvas.getWidth();
+    double canvasHeight = gameCanvas.getHeight();
+    double boxSize, offset;
 
-    gameLogic.playCoordinates(i, j);
+    if (canvasWidth > canvasHeight) {
+
+      boxSize = canvasHeight / drawLimit;
+      offset = (canvasWidth - canvasHeight) / 2;
+    } else {
+
+      boxSize = canvasWidth / drawLimit;
+      offset = (canvasHeight - canvasWidth) / 2;
+    }
+
+    if (canvasWidth > canvasHeight) {
+      if (event.getX() >= offset && event.getX() <= offset + canvasHeight) {
+        i = (int) (event.getX() - offset) / (int) boxSize;
+        j = (int) event.getY() / (int) boxSize;
+
+        gameLogic.playCoordinates(i, j);
+      }
+    } else {
+      if (event.getY() >= offset && event.getY() <= offset + canvasWidth) {
+        i = (int) event.getX() / (int) boxSize;
+        j = (int) (event.getY() - offset) / (int) boxSize;
+
+        gameLogic.playCoordinates(i, j);
+      }
+    }
   }
 
   /**
