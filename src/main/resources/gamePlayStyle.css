@@ -22,13 +22,6 @@ Button:pressed {
   -fx-font-color: rgba(255,255,255,1);
 }
 
-HBox {
-  -fx-background-image: url("backgroundimages/main_menu_background.webp");
-  -fx-background-repeat: stretch;
-  -fx-background-size: cover;
-  -fx-background-position: center center;
-}
-
 #container {
   -fx-background-image: url("backgroundimages/canvas_background.webp");
   -fx-background-repeat: stretch;

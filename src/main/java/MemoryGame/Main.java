@@ -53,7 +53,7 @@ public class Main extends Application {
     gameLayout.getStylesheets().add(this.getClass().getResource("/gamePlayStyle.css").toExternalForm());
     endGameLayout.getStylesheets().add(this.getClass().getResource("/endGameStyle.css").toExternalForm());
 
-    scene = new Scene(menuLayout, 600, 800);
+    scene = new Scene(menuLayout, 720, 800);
     primaryStage.setScene(scene);
     primaryStage.show();
   }
