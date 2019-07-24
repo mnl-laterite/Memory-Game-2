@@ -3,7 +3,7 @@ A memory game app. The goal of the game is to eliminate all the pieces from the 
 
 ### How to build
 
-The project's pom file is ready to build. Download the source code and use run mvn package.
+The project's pom file is ready to build. Download the source code and run mvn package.
 
 ### Some gameplay screens
 
