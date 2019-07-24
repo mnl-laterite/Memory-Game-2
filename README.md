@@ -1,6 +1,8 @@
 ## Memory Game 2
 A memory game app. The goal of the game is to eliminate all the pieces from the table. Pieces are eliminated in pairs, if they are both uncovered during the same turn. A turn consists of flipping over two game pieces. The two pieces are flipped back bottom-side-up if they don't match.
 
+This is a more polished version of an older project, using [javaFX](https://openjfx.io/) for a more up-to-date look.
+
 ### How to build
 
 The project's pom file is ready to build. Download the source code and run mvn package.
