@@ -1,7 +1,6 @@
 package MemoryGame.game;
 
-import javafx.geometry.Dimension2D;
-
+import javafx.scene.input.KeyCode;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -54,6 +53,11 @@ public class GameLogic {
   private long piecesFlippedTime = -1;
 
   /**
+   * Saves the coordinates of the currently selected piece (by keyboard input).
+   */
+  private Coordinates selectedPiece;
+
+  /**
    * Constructs the game board at its maximum potentially needed size.
    *
    * @param difficulty the difficulty level of the game.
@@ -73,6 +77,7 @@ public class GameLogic {
    */
   public void resetGame (Difficulty difficulty) {
 
+    selectedPiece = new Coordinates(-1,-1);
     pairsFound = 0;
     piecesTurned = 0;
     setDifficultyParameters(difficulty);
@@ -138,6 +143,52 @@ public class GameLogic {
     }
 
   }
+
+  /**
+   * Checks if the user is hovering over a given piece using the keyboard arrow keys.
+   *
+   * @param rowIndex the row index in the game board matrix.
+   * @param colIndex the column index in the game board matrix.
+   * @return true if the user has selected the piece at the given coordinates.
+   */
+  public boolean isSelected (int rowIndex, int colIndex) {
+
+    return selectedPiece.getRowIndex() == rowIndex && selectedPiece.getColIndex() == colIndex;
+  }
+
+  /**
+   * Moves and plays the selection according to user keyboard input.
+   *
+   * @param code the KeyCode of the key pressed & released by the user.
+   */
+  public void playSelection (KeyCode code) {
+
+    if (selectedPiece.getRowIndex() == -1 && selectedPiece.getColIndex() == -1) {
+      selectedPiece = new Coordinates(0,0);
+    } else {
+      if (code == KeyCode.DOWN && selectedPiece.getColIndex() < gamePlayMapDepth - 1) {
+        selectedPiece = new Coordinates(selectedPiece.getRowIndex(),selectedPiece.getColIndex() + 1);
+      }
+
+      if (code == KeyCode.UP && selectedPiece.getColIndex() > 0) {
+        selectedPiece = new Coordinates(selectedPiece.getRowIndex(),selectedPiece.getColIndex() - 1);
+      }
+
+      if (code == KeyCode.RIGHT && selectedPiece.getRowIndex() < gamePlayMapDepth - 1) {
+        selectedPiece = new Coordinates(selectedPiece.getRowIndex() + 1, selectedPiece.getColIndex());
+      }
+
+      if (code == KeyCode.LEFT && selectedPiece.getRowIndex() > 0) {
+        selectedPiece = new Coordinates(selectedPiece.getRowIndex() - 1, selectedPiece.getColIndex());
+      }
+
+      if (code == KeyCode.SPACE) {
+        playCoordinates(selectedPiece.getRowIndex(),selectedPiece.getColIndex());
+      }
+    }
+
+  }
+
 
   /**
    * Checks if the piece at given coordinates is turned bottom-side down (i.e. unique piece sprite visible
@@ -213,7 +264,7 @@ public class GameLogic {
   }
 
   /**
-   * Eliminates marked pairs from the game.
+   * Eliminates (matching) marked pairs from the game, and increments the number of pairs found.
    */
   private void eliminateMarkedPairs () {
 
@@ -224,7 +275,6 @@ public class GameLogic {
         }
       }
     }
-
 
     ++pairsFound;
   }
@@ -237,9 +287,9 @@ public class GameLogic {
   }
 
   /**
-   * Checks for matching pieces and eliminates them from the game board.
+   * Checks for matching pieces on the the game board.
    *
-   * @return true if a pair was found and eliminated, i.e. if the user has turned two matching pieces bottom-side down.
+   * @return true if a pair was found, i.e. if the user has turned two matching pieces bottom-side down.
    */
   boolean pairFound () {
 

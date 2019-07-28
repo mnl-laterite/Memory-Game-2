@@ -10,6 +10,8 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -83,17 +85,31 @@ class GamePlayGUI {
     gameLayout.setCenter(canvasContainer);
     gameLayout.setBottom(optionsButtons);
 
-    //getting the bottomside sprite of the pices
+    //Getting the bottomside sprite of the pieces.
     gamePieces[0] = new Image(this.getClass().getResource("/gamepieces/tilebackside.png").toExternalForm());
 
-    //getting the 12 unique topside sprites for the pieces
+    //Getting the 12 unique topside sprites for the pieces.
     for (int i = 1; i <= 12; ++i) {
       gamePieces[i] = new Image(this.getClass().getResource("/gamepieces/" + i + ".png").toExternalForm());
     }
 
     graphicsContext = gameCanvas.getGraphicsContext2D();
 
+    gameCanvas.setFocusTraversable(true);
+    gameCanvas.requestFocus();
+
+    //Blocking the arrow keys from changing focus away from the game canvas when they are pressed.
+    gameCanvas.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+      if (event.getCode() == KeyCode.DOWN ||
+        event.getCode() == KeyCode.UP ||
+        event.getCode() == KeyCode.LEFT ||
+        event.getCode() == KeyCode.RIGHT) {
+        event.consume();
+      }
+    });
+
     gameCanvas.setOnMouseClicked(this::onMouseClicked);
+    gameCanvas.addEventHandler(KeyEvent.KEY_RELEASED, this::onKeyReleased);
 
     Timeline gameTimeline = new Timeline();
     gameTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -162,6 +178,15 @@ class GamePlayGUI {
               boxSize - 10,
               boxSize - 10);
           }
+
+          if (gameLogic.isSelected(i, j)) {
+            graphicsContext.setFill(Color.rgb(0,153,255,0.5));
+            graphicsContext.fillRect(i*boxSize + offset,
+              j*boxSize,
+              boxSize - 10,
+              boxSize - 10);
+          }
+
         }
       }
     } else {
@@ -190,13 +215,21 @@ class GamePlayGUI {
               boxSize - 10,
               boxSize - 10);
           }
+
+          if (gameLogic.isSelected(i, j)) {
+            graphicsContext.setFill(Color.rgb(0,153,255,0.5));
+            graphicsContext.fillRect(i*boxSize,
+              j*boxSize + offset,
+              boxSize - 10,
+              boxSize - 10);
+          }
         }
       }
     }
   }
 
   /**
-   * Checks if the input is valid (i.e. on a piece) and then plays the coordinates clicked on the game board.
+   * Checks if the mouse input is valid (i.e. on a piece) and then plays the coordinates clicked on the game board.
    *
    * @param event mouse click on the canvas.
    */
@@ -234,6 +267,15 @@ class GamePlayGUI {
         gameLogic.playCoordinates(i, j);
       }
     }
+  }
+
+  /**
+   * Moves and plays the selection of a game piece according to user keyboard input.
+   *
+   * @param event the KeyEvent made by the user.
+   */
+  public void onKeyReleased(KeyEvent event) {
+    gameLogic.playSelection(event.getCode());
   }
 
   /**
