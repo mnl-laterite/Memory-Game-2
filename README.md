@@ -1,5 +1,5 @@
 ## Memory Game 2
-A memory game app. The goal of the game is to eliminate all the pieces from the table. Pieces are eliminated in pairs, if they are both uncovered during the same turn. A turn consists of flipping over two game pieces. The two pieces are flipped back bottom-side-up if they don't match.
+A memory game app. The goal of the game is to eliminate all the pieces from the table. Pieces are eliminated in pairs, if they are both uncovered during the same turn. A turn consists of flipping over two game pieces. The two pieces are flipped back bottom-side-up if they don't match. The game is played with the mouse by default, but can also be played using the keyboard arrow keys (to move the selection) and space button (to flip a selected piece over).
 
 This is a more polished version of [an older project](https://github.com/mnl-laterite/Memory-Game), using [javaFX](https://openjfx.io/) for a more up-to-date look.
 
