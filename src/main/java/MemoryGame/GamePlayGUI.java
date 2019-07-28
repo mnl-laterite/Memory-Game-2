@@ -274,7 +274,7 @@ class GamePlayGUI {
    *
    * @param event the KeyEvent made by the user.
    */
-  public void onKeyReleased(KeyEvent event) {
+  private void onKeyReleased(KeyEvent event) {
     gameLogic.playSelection(event.getCode());
   }
 
