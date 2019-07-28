@@ -5,7 +5,7 @@ This is a more polished version of [an older project](https://github.com/mnl-lat
 
 ### How to build
 
-The project's pom file is ready to build. Download the source code and run mvn package.
+The project's pom file is ready to build. Download the source code and run mvn package. You can also create an .exe wrapper for the .jar using the [Launch4j](http://launch4j.sourceforge.net/) config file provided.
 
 ### Some gameplay screens
 
